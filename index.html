@@ -1,0 +1,2807 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DRAGONS101</title>
+</head>
+<body>
+
+    <!-- لاگین -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <h2>👋 خوش آمدید!</h2>
+            <p style="color:rgba(255,255,255,0.4);margin-bottom:15px;font-size:14px;">نام خود را وارد کنید</p>
+            <input type="text" id="usernameInput" placeholder="نام شما..." />
+            <button class="btn btn-primary" onclick="loginUser()">ورود</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- هدر -->
+        <div class="header">
+            <div class="header-left">
+                <div class="dragon-container" id="dragonContainer">
+                    <div class="dragon" id="dragon">
+                        <div class="dragon-body">
+                            <div class="dragon-head">
+                                <div class="dragon-hat">🎓</div>
+                            </div>
+                            <div class="dragon-body-line"></div>
+                            <div class="dragon-arm left-arm"></div>
+                            <div class="dragon-arm right-arm"></div>
+                            <div class="dragon-leg left-leg"></div>
+                            <div class="dragon-leg right-leg"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="title-section">
+                    <h1>🐉 DRAGONS101</h1>
+                    <div class="subtitle">⚡ DRAGONOLOGY ⚡</div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="score-badge">⭐ <span id="userScore">0</span></div>
+                <div class="streak-box" id="streakBox">
+                    <span class="fire-icon">🔥</span>
+                    <span class="streak-number" id="streakNumber">0</span>
+                    <span style="font-size:14px;margin-right:2px;">روز</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- تب‌ها -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="admin">📝 مدیریت</button>
+            <button class="tab-btn" data-tab="game">🎮 بازی</button>
+            <button class="tab-btn" data-tab="study">📖 آموزش</button>
+            <button class="tab-btn" data-tab="spelling">✍️ املا</button>
+            <button class="tab-btn" data-tab="grammar">📝 گرامر</button>
+            <button class="tab-btn" data-tab="rank">🏆 آمار</button>
+        </div>
+
+        <!-- ادمین -->
+        <div id="page-admin" class="page active">
+            <div id="adminLock" style="display:none;">
+                <div class="admin-form">
+                    <input type="password" id="adminPassword" placeholder="رمز ورود به پنل مدیریت" />
+                    <button class="btn btn-primary" onclick="checkAdminPassword()">ورود به پنل</button>
+                </div>
+            </div>
+            <div id="adminPanel" style="display:none;">
+                <h3 style="margin-bottom:15px;color:rgba(255,255,255,0.7);">➕ افزودن کلمه جدید</h3>
+                <div class="admin-form">
+                    <input type="text" id="wordEn" placeholder="کلمه به انگلیسی" />
+                    <input type="text" id="wordFa" placeholder="معنی فارسی" />
+                    <textarea id="wordSentence" placeholder="جمله مثال (اختیاری)"></textarea>
+                    <button class="btn btn-primary" onclick="addWord()">➕ افزودن کلمه</button>
+                </div>
+                <h3 style="margin:20px 0 10px;color:rgba(255,255,255,0.7);">📋 لیست کلمات</h3>
+                <div class="word-list" id="wordListContainer"></div>
+                <hr style="margin:20px 0;border:1px solid rgba(255,255,255,0.05);" />
+                <h3 style="margin-bottom:15px;color:rgba(255,255,255,0.7);">✅ تسک روزانه</h3>
+                <div class="admin-form">
+                    <input type="text" id="taskDesc" placeholder="توضیح تسک (مثلاً: ۲۰ کلمه آموزش ببین)" />
+                    <input type="number" id="taskTarget" placeholder="تعداد هدف (مثلاً: ۲۰)" />
+                    <button class="btn btn-gold" onclick="addTask()">➕ افزودن تسک</button>
+                </div>
+                <hr style="margin:20px 0;border:1px solid rgba(255,255,255,0.05);" />
+                <h3 style="margin-bottom:15px;color:rgba(255,255,255,0.7);">📝 افزودن درس گرامر</h3>
+                <div class="admin-form">
+                    <input type="text" id="grammarTitle" placeholder="عنوان درس (مثلاً: زمان حال ساده)" />
+                    <textarea id="grammarContent" placeholder="متن درس گرامر..." style="min-height:100px;"></textarea>
+                    <button class="btn btn-primary" onclick="addGrammar()">➕ افزودن درس</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- بازی -->
+        <div id="page-game" class="page">
+            <div class="game-word" id="gameWord">Apple</div>
+            <div class="game-options" id="gameOptions">
+                <button class="game-option" data-index="0">سیب</button>
+                <button class="game-option" data-index="1">پرتقال</button>
+                <button class="game-option" data-index="2">موز</button>
+                <button class="game-option" data-index="3">انگور</button>
+            </div>
+            <div class="game-progress">
+                <span id="gameCounter">1 / 10</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width:10%"></div>
+                </div>
+                <span id="gameScore">امتیاز: 0</span>
+            </div>
+            <button class="btn btn-success" style="width:100%;margin-top:15px;" onclick="nextGameQuestion()">سوال بعدی ➜</button>
+        </div>
+
+        <!-- آموزش -->
+        <div id="page-study" class="page">
+            <div class="task-container" id="taskContainer">
+                <h4 style="color:rgba(255,255,255,0.7);">📋 تسک روزانه</h4>
+                <p id="taskDescDisplay" style="color:rgba(255,255,255,0.4);">هیچ تسکی تنظیم نشده</p>
+                <div class="task-progress">
+                    <span id="taskProgressText" style="color:rgba(255,255,255,0.3);">0%</span>
+                    <div class="task-bar">
+                        <div class="task-fill" id="taskFill" style="width:0%"></div>
+                    </div>
+                    <span id="taskStatus" style="font-weight:bold;color:rgba(255,255,255,0.3);">⏳</span>
+                </div>
+            </div>
+            <div class="study-card" id="studyCard">
+                <div class="word" id="studyWord">Apple</div>
+                <div class="meaning" id="studyMeaning">سیب</div>
+                <div class="sentence" id="studySentence">I eat an apple every day.</div>
+            </div>
+            <div class="study-nav">
+                <button onclick="prevStudy()">◀ قبلی</button>
+                <button class="btn-reveal" onclick="toggleMeaning()">👁 معنی</button>
+                <button onclick="speakCurrentWord()">🔊 تلفظ</button>
+                <button onclick="nextStudy()">بعدی ▶</button>
+            </div>
+            <p style="text-align:center;margin-top:10px;color:rgba(255,255,255,0.2);font-size:14px;">
+                <span id="studyCounter">1</span> از <span id="studyTotal">0</span>
+            </p>
+        </div>
+
+        <!-- املا -->
+        <div id="page-spelling" class="page">
+            <h3 style="margin-bottom:15px;color:rgba(255,255,255,0.7);">✍️ بخش املا</h3>
+            <div class="spelling-container">
+                <div class="spelling-word" id="spellingWord">Apple</div>
+                <div class="spelling-meaning" id="spellingMeaning">سیب</div>
+                <div class="spelling-input-container">
+                    <input type="text" id="spellingInput" placeholder="کلمه را بنویسید..." />
+                    <button class="btn btn-primary" onclick="checkSpelling()">✅ بررسی</button>
+                </div>
+                <div class="spelling-result" id="spellingResult"></div>
+                <div class="spelling-progress">
+                    <span id="spellingCounter">1 / 10</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="spellingProgressFill" style="width:0%"></div>
+                    </div>
+                    <span id="spellingScore">امتیاز: 0</span>
+                </div>
+                <button class="btn btn-success" style="width:100%;margin-top:15px;" onclick="nextSpellingQuestion()">کلمه بعدی ➜</button>
+            </div>
+        </div>
+
+        <!-- گرامر -->
+        <div id="page-grammar" class="page">
+            <h3 style="margin-bottom:15px;color:rgba(255,255,255,0.7);">📝 درس‌های گرامر</h3>
+            <div id="grammarList"></div>
+        </div>
+
+        <!-- آمار -->
+        <div id="page-rank" class="page">
+            <h3 style="margin-bottom:15px;color:rgba(255,255,255,0.7);">🏆 رتبه‌بندی عمومی</h3>
+            <p style="color:rgba(255,255,255,0.3);font-size:13px;margin-bottom:15px;">همه کاربران از اول تا آخر</p>
+            <div class="rank-list" id="rankList"></div>
+        </div>
+    </div>
+
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Vazir', 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #0c0e1a 0%, #1a1c2e 50%, #0c0e1a 100%);
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+            radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+            radial-gradient(2px 2px at 50px 160px, #ddd, transparent),
+            radial-gradient(2px 2px at 90px 40px, rgba(255,255,255,0.6), transparent),
+            radial-gradient(2px 2px at 130px 80px, #fff, transparent),
+            radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.7), transparent);
+        background-size: 200px 200px;
+        background-repeat: repeat;
+        opacity: 0.3;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .container {
+        max-width: 520px;
+        width: 100%;
+        background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 40px;
+        padding: 25px;
+        box-shadow: 
+            0 30px 80px rgba(0, 0, 0, 0.6),
+            inset 0 1px 0 rgba(255,255,255,0.1);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.05);
+        z-index: 1;
+    }
+
+    .container::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(ellipse at 30% 20%, rgba(108, 92, 231, 0.05), transparent 70%);
+        pointer-events: none;
+        animation: glowPulse 8s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+        0%, 100% { opacity: 0.3; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(1.1); }
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        flex-wrap: wrap;
+        gap: 10px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+    }
+
+    .title-section h1 {
+        font-size: 22px;
+        color: #ffd700;
+        text-shadow: 
+            0 0 30px rgba(255,215,0,0.15),
+            0 0 60px rgba(255,215,0,0.05);
+        letter-spacing: 2px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffd700, #ff6b00);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: none;
+    }
+
+    .title-section .subtitle {
+        font-size: 10px;
+        color: rgba(255,255,255,0.3);
+        letter-spacing: 4px;
+        font-weight: 300;
+        margin-top: 2px;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    .score-badge {
+        background: linear-gradient(135deg, rgba(0, 184, 148, 0.2), rgba(0, 206, 201, 0.2));
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #00cec9;
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 14px;
+        border: 1px solid rgba(0, 206, 201, 0.15);
+        box-shadow: 0 4px 20px rgba(0, 206, 201, 0.05);
+    }
+
+    .streak-box {
+        background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(238, 90, 36, 0.15));
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 4px 12px 4px 8px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: #ff6b6b;
+        font-weight: bold;
+        font-size: 14px;
+        border: 1px solid rgba(255, 107, 107, 0.1);
+        box-shadow: 0 4px 20px rgba(255, 107, 107, 0.05);
+        animation: firePulse 2s ease-in-out infinite;
+    }
+
+    @keyframes firePulse {
+        0%, 100% { box-shadow: 0 4px 20px rgba(255, 107, 107, 0.05); }
+        50% { box-shadow: 0 4px 30px rgba(255, 107, 107, 0.15); }
+    }
+
+    .streak-box .fire-icon {
+        font-size: 18px;
+        display: inline-block;
+        animation: fireDance 1.5s ease-in-out infinite;
+    }
+
+    @keyframes fireDance {
+        0%, 100% { transform: rotate(-5deg) scale(1); }
+        50% { transform: rotate(5deg) scale(1.1); }
+    }
+
+    .streak-box .streak-number {
+        font-size: 18px;
+        min-width: 20px;
+        text-align: center;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* ===== تب‌ها ===== */
+    .tabs {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 4px;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .tab-btn {
+        padding: 8px 2px;
+        border: none;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.03);
+        color: rgba(255,255,255,0.35);
+        font-weight: bold;
+        font-size: 10px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 1px solid rgba(255,255,255,0.03);
+        letter-spacing: 0.3px;
+    }
+
+    .tab-btn:hover {
+        transform: translateY(-2px);
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.6);
+    }
+
+    .tab-btn.active {
+        background: linear-gradient(135deg, rgba(108, 92, 231, 0.2), rgba(9, 132, 227, 0.2));
+        color: #a29bfe;
+        border-color: rgba(108, 92, 231, 0.15);
+        box-shadow: 0 4px 20px rgba(108, 92, 231, 0.05);
+    }
+
+    /* ===== صفحات ===== */
+    .page {
+        display: none;
+        animation: fadeIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .page.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+      </style>
+
+  <style>
+    /* ============================================================
+       فرنگی دزد - آدمک مینیمال با چشم‌های ناز و کوچولو
+       ============================================================ */
+
+    .dragon-container {
+        width: 65px;
+        height: 80px;
+        position: relative;
+        flex-shrink: 0;
+        margin-right: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .dragon {
+        width: 65px;
+        height: 80px;
+        position: relative;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon-body {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* ===== سر - دایره طلایی ===== */
+    .dragon-head {
+        width: 38px;
+        height: 38px;
+        background: radial-gradient(circle at 40% 35%, #ffd93d, #f6b93b);
+        border-radius: 50%;
+        position: relative;
+        box-shadow: 
+            0 0 30px rgba(255, 215, 0, 0.12),
+            inset 0 -4px 10px rgba(0,0,0,0.04);
+        transform-origin: center bottom;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 2px solid rgba(255, 215, 0, 0.15);
+        flex-shrink: 0;
+        z-index: 2;
+    }
+
+    /* ===== چشم‌های ناز و کوچولو ===== */
+    .dragon-eye {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #1a1a2e;
+        border-radius: 50%;
+        top: 14px;
+        transition: all 0.3s ease;
+        z-index: 3;
+    }
+
+    .dragon-eye::after {
+        content: '';
+        position: absolute;
+        width: 1.5px;
+        height: 1.5px;
+        background: rgba(255,255,255,0.6);
+        border-radius: 50%;
+        top: 0.5px;
+        left: 0.5px;
+        transition: all 0.3s ease;
+    }
+
+    .dragon-eye.left {
+        left: 8px;
+    }
+
+    .dragon-eye.right {
+        right: 8px;
+    }
+
+    /* ===== ابروهای نازک ===== */
+    .dragon-eyebrow {
+        position: absolute;
+        width: 8px;
+        height: 1.5px;
+        background: rgba(26, 26, 46, 0.3);
+        border-radius: 2px;
+        top: 10px;
+        transition: all 0.3s ease;
+        z-index: 4;
+    }
+
+    .dragon-eyebrow.left {
+        left: 6px;
+        transform: rotate(-10deg);
+    }
+
+    .dragon-eyebrow.right {
+        right: 6px;
+        transform: rotate(10deg);
+    }
+
+    /* ===== دهان کوچولو ===== */
+    .dragon-mouth {
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 10px;
+        height: 3px;
+        border-bottom: 2px solid rgba(26, 26, 46, 0.2);
+        border-radius: 0 0 50% 50%;
+        transition: all 0.3s ease;
+        z-index: 3;
+    }
+
+    /* ===== کلاه دانشجویی 🎓 ===== */
+    .dragon-hat {
+        position: absolute;
+        top: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 18px;
+        filter: drop-shadow(0 3px 8px rgba(255,215,0,0.15));
+        animation: hatFloat 3s ease-in-out infinite;
+        z-index: 5;
+    }
+
+    @keyframes hatFloat {
+        0%, 100% { transform: translateX(-50%) translateY(0) rotate(-2deg); }
+        50% { transform: translateX(-50%) translateY(-4px) rotate(2deg); }
+    }
+
+    /* ===== بدن - خط عمودی ===== */
+    .dragon-body-line {
+        width: 3px;
+        height: 22px;
+        background: linear-gradient(to bottom, #f6b93b, #e8a838);
+        border-radius: 10px;
+        margin-top: -2px;
+        position: relative;
+        flex-shrink: 0;
+        opacity: 0.5;
+        z-index: 1;
+    }
+
+    /* ===== دست‌ها (جدا از بدن) ===== */
+    .dragon-arm {
+        position: absolute;
+        width: 18px;
+        height: 3px;
+        background: linear-gradient(to right, #e8a838, #f6b93b);
+        border-radius: 10px;
+        top: 44px;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        opacity: 0.4;
+        z-index: 1;
+    }
+
+    .dragon-arm.left-arm {
+        left: 2px;
+        transform: rotate(-25deg);
+        transform-origin: right center;
+        animation: armSwingLeft 2.8s ease-in-out infinite;
+    }
+
+    .dragon-arm.right-arm {
+        right: 2px;
+        transform: rotate(25deg);
+        transform-origin: left center;
+        animation: armSwingRight 2.8s ease-in-out infinite;
+    }
+
+    @keyframes armSwingLeft {
+        0%, 100% { transform: rotate(-25deg); }
+        50% { transform: rotate(-40deg); }
+    }
+
+    @keyframes armSwingRight {
+        0%, 100% { transform: rotate(25deg); }
+        50% { transform: rotate(40deg); }
+    }
+
+    /* ===== پاها (جدا از بدن) ===== */
+    .dragon-leg {
+        position: absolute;
+        width: 3px;
+        height: 16px;
+        background: linear-gradient(to bottom, #e8a838, #d49a30);
+        border-radius: 10px;
+        bottom: 2px;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        opacity: 0.4;
+        z-index: 1;
+    }
+
+    .dragon-leg.left-leg {
+        left: 14px;
+        transform: rotate(-6deg);
+        transform-origin: top center;
+        animation: legSwingLeft 2.2s ease-in-out infinite;
+    }
+
+    .dragon-leg.right-leg {
+        right: 14px;
+        transform: rotate(6deg);
+        transform-origin: top center;
+        animation: legSwingRight 2.2s ease-in-out infinite;
+    }
+
+    @keyframes legSwingLeft {
+        0%, 100% { transform: rotate(-6deg); }
+        50% { transform: rotate(6deg); }
+    }
+
+    @keyframes legSwingRight {
+        0%, 100% { transform: rotate(6deg); }
+        50% { transform: rotate(-6deg); }
+    }
+
+    /* ============================================================
+       ریسپانسیو فرنگی دزد برای موبایل
+       ============================================================ */
+    @media (max-width: 480px) {
+        .dragon-container {
+            width: 48px;
+            height: 60px;
+        }
+
+        .dragon {
+            width: 48px;
+            height: 60px;
+        }
+
+        .dragon-head {
+            width: 28px;
+            height: 28px;
+        }
+
+        .dragon-eye {
+            width: 3px;
+            height: 3px;
+            top: 10px;
+        }
+
+        .dragon-eye::after {
+            width: 1px;
+            height: 1px;
+            top: 0.5px;
+            left: 0.5px;
+        }
+
+        .dragon-eye.left {
+            left: 5px;
+        }
+
+        .dragon-eye.right {
+            right: 5px;
+        }
+
+        .dragon-eyebrow {
+            width: 6px;
+            height: 1px;
+            top: 7px;
+        }
+
+        .dragon-eyebrow.left {
+            left: 4px;
+        }
+
+        .dragon-eyebrow.right {
+            right: 4px;
+        }
+
+        .dragon-mouth {
+            width: 7px;
+            height: 2px;
+            bottom: 6px;
+            border-bottom-width: 1.5px;
+        }
+
+        .dragon-hat {
+            font-size: 14px;
+            top: -14px;
+        }
+
+        .dragon-body-line {
+            height: 16px;
+            width: 2px;
+        }
+
+        .dragon-arm {
+            width: 13px;
+            height: 2px;
+            top: 33px;
+        }
+
+        .dragon-arm.left-arm {
+            left: 1px;
+        }
+
+        .dragon-arm.right-arm {
+            right: 1px;
+        }
+
+        .dragon-leg {
+            height: 12px;
+            width: 2px;
+            bottom: 2px;
+        }
+
+        .dragon-leg.left-leg {
+            left: 10px;
+        }
+
+        .dragon-leg.right-leg {
+            right: 10px;
+        }
+    }
+  </style>
+
+  <style>
+    /* ============================================================
+       انیمیشن پرش تمیز (مثل دولینگو) - پاسخ درست
+       ============================================================ */
+
+    .dragon.jumping {
+        animation: jumpClean 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .dragon.jumping .dragon-head {
+        animation: headBounceClean 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.jumping .dragon-arm.left-arm {
+        animation: armJumpCleanL 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.jumping .dragon-arm.right-arm {
+        animation: armJumpCleanR 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.jumping .dragon-leg.left-leg {
+        animation: legJumpCleanL 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.jumping .dragon-leg.right-leg {
+        animation: legJumpCleanR 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.jumping .dragon-hat {
+        animation: hatJumpClean 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.jumping .dragon-eye {
+        animation: eyeJump 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.jumping .dragon-mouth {
+        animation: mouthJump 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.jumping .dragon-eyebrow {
+        animation: eyebrowJump 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes eyeJump {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.8); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes mouthJump {
+        0% { width: 10px; height: 3px; }
+        50% { width: 16px; height: 6px; border-bottom-width: 3px; }
+        100% { width: 10px; height: 3px; }
+    }
+
+    @keyframes eyebrowJump {
+        0% { transform: rotate(-10deg) scale(1); }
+        50% { transform: rotate(-25deg) scale(1.3); }
+        100% { transform: rotate(-10deg) scale(1); }
+    }
+
+    /* ===== افکت ستاره‌های شادی ===== */
+    .dragon.jumping::after {
+        content: '⭐';
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        font-size: 18px;
+        animation: sparkleClean1 0.7s ease-out forwards;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .dragon.jumping::before {
+        content: '✨';
+        position: absolute;
+        top: -10px;
+        left: -18px;
+        font-size: 14px;
+        animation: sparkleClean2 0.7s ease-out forwards 0.1s;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .dragon.jumping .dragon-head::after {
+        content: '🌟';
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 16px;
+        animation: sparkleClean3 0.7s ease-out forwards 0.2s;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    @keyframes sparkleClean1 {
+        0% { opacity: 0; transform: scale(0) rotate(0deg) translateY(0); }
+        25% { opacity: 1; transform: scale(1.5) rotate(20deg) translateY(-5px); }
+        50% { opacity: 1; transform: scale(1.2) rotate(10deg) translateY(-10px); }
+        100% { opacity: 0; transform: scale(0.8) rotate(-10deg) translateY(-25px); }
+    }
+
+    @keyframes sparkleClean2 {
+        0% { opacity: 0; transform: scale(0) rotate(0deg) translateY(0); }
+        25% { opacity: 1; transform: scale(1.4) rotate(-20deg) translateY(-5px); }
+        50% { opacity: 1; transform: scale(1.1) rotate(-10deg) translateY(-10px); }
+        100% { opacity: 0; transform: scale(0.7) rotate(10deg) translateY(-25px); }
+    }
+
+    @keyframes sparkleClean3 {
+        0% { opacity: 0; transform: translateX(-50%) scale(0) rotate(0deg) translateY(0); }
+        25% { opacity: 1; transform: translateX(-50%) scale(1.6) rotate(30deg) translateY(-5px); }
+        50% { opacity: 1; transform: translateX(-50%) scale(1.2) rotate(15deg) translateY(-10px); }
+        100% { opacity: 0; transform: translateX(-50%) scale(0.8) rotate(-15deg) translateY(-30px); }
+    }
+
+    /* ===== پرش اصلی - تمیز و نرم ===== */
+    @keyframes jumpClean {
+        0% { transform: translateY(0) scale(1); }
+        15% { transform: translateY(-8px) scale(1.02); }
+        30% { transform: translateY(-32px) scale(1.06); }
+        45% { transform: translateY(-42px) scale(1.08); }
+        60% { transform: translateY(-35px) scale(1.06); }
+        75% { transform: translateY(-18px) scale(1.03); }
+        90% { transform: translateY(-6px) scale(1.01); }
+        100% { transform: translateY(0) scale(1); }
+    }
+
+    @keyframes headBounceClean {
+        0% { transform: scale(1) rotate(0deg); }
+        20% { transform: scale(1.12) rotate(-6deg); }
+        40% { transform: scale(1.18) rotate(4deg); }
+        60% { transform: scale(1.08) rotate(-3deg); }
+        80% { transform: scale(1.02) rotate(2deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+
+    @keyframes armJumpCleanL {
+        0% { transform: rotate(-25deg); }
+        20% { transform: rotate(-55deg); }
+        40% { transform: rotate(-65deg); }
+        60% { transform: rotate(-40deg); }
+        80% { transform: rotate(-30deg); }
+        100% { transform: rotate(-25deg); }
+    }
+
+    @keyframes armJumpCleanR {
+        0% { transform: rotate(25deg); }
+        20% { transform: rotate(55deg); }
+        40% { transform: rotate(65deg); }
+        60% { transform: rotate(40deg); }
+        80% { transform: rotate(30deg); }
+        100% { transform: rotate(25deg); }
+    }
+
+    @keyframes legJumpCleanL {
+        0% { transform: rotate(-6deg); }
+        20% { transform: rotate(-20deg); }
+        40% { transform: rotate(-25deg); }
+        60% { transform: rotate(-15deg); }
+        80% { transform: rotate(-10deg); }
+        100% { transform: rotate(-6deg); }
+    }
+
+    @keyframes legJumpCleanR {
+        0% { transform: rotate(6deg); }
+        20% { transform: rotate(20deg); }
+        40% { transform: rotate(25deg); }
+        60% { transform: rotate(15deg); }
+        80% { transform: rotate(10deg); }
+        100% { transform: rotate(6deg); }
+    }
+
+    @keyframes hatJumpClean {
+        0% { transform: translateX(-50%) rotate(0deg) scale(1); }
+        20% { transform: translateX(-50%) rotate(-15deg) scale(1.15); }
+        40% { transform: translateX(-50%) rotate(10deg) scale(1.25); }
+        60% { transform: translateX(-50%) rotate(-8deg) scale(1.05); }
+        80% { transform: translateX(-50%) rotate(5deg) scale(0.95); }
+        100% { transform: translateX(-50%) rotate(0deg) scale(1); }
+    }
+
+    /* ============================================================
+       انیمیشن زمین خوردن تمیز (پاسخ اشتباه)
+       ============================================================ */
+
+    .dragon.fall {
+        animation: fallClean 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.fall .dragon-head {
+        animation: headFallClean 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.fall .dragon-arm.left-arm {
+        animation: armFallCleanL 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.fall .dragon-arm.right-arm {
+        animation: armFallCleanR 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.fall .dragon-leg.left-leg {
+        animation: legFallCleanL 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.fall .dragon-leg.right-leg {
+        animation: legFallCleanR 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.fall .dragon-hat {
+        animation: hatFallClean 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.fall .dragon-eye {
+        animation: eyeFall 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dragon.fall .dragon-mouth {
+        animation: mouthFall 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes eyeFall {
+        0% { transform: scale(1); }
+        30% { transform: scale(0.5); }
+        60% { transform: scale(0.7); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes mouthFall {
+        0% { width: 10px; height: 3px; border-bottom: 2px solid rgba(26,26,46,0.2); }
+        30% { width: 14px; height: 4px; border-bottom: 2px solid rgba(26,26,46,0.4); border-radius: 50%; }
+        60% { width: 8px; height: 2px; border-bottom: 2px solid rgba(26,26,46,0.1); }
+        100% { width: 10px; height: 3px; border-bottom: 2px solid rgba(26,26,46,0.2); }
+    }
+
+    .dragon.fall::after {
+        content: '💫';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 22px;
+        animation: fallEffectClean 0.5s ease-out forwards;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    @keyframes fallEffectClean {
+        0% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(0deg); }
+        25% { opacity: 1; transform: translate(-50%, -50%) scale(1.4) rotate(120deg); }
+        50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1) rotate(240deg); }
+        100% { opacity: 0; transform: translate(-50%, -50%) scale(0.6) rotate(360deg) translateY(15px); }
+    }
+
+    @keyframes fallClean {
+        0% { transform: translateY(0) rotate(0deg); }
+        15% { transform: translateY(8px) rotate(-8deg); }
+        30% { transform: translateY(14px) rotate(6deg); }
+        50% { transform: translateY(18px) rotate(-4deg); }
+        70% { transform: translateY(12px) rotate(2deg); }
+        85% { transform: translateY(6px) rotate(-1deg); }
+        100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    @keyframes headFallClean {
+        0% { transform: scale(1) rotate(0deg); }
+        20% { transform: scale(0.92) rotate(-12deg); }
+        40% { transform: scale(0.88) rotate(8deg); }
+        60% { transform: scale(0.94) rotate(-5deg); }
+        80% { transform: scale(0.98) rotate(3deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+
+    @keyframes armFallCleanL {
+        0% { transform: rotate(-25deg); }
+        20% { transform: rotate(-55deg); }
+        40% { transform: rotate(-35deg); }
+        60% { transform: rotate(-45deg); }
+        100% { transform: rotate(-25deg); }
+    }
+
+    @keyframes armFallCleanR {
+        0% { transform: rotate(25deg); }
+        20% { transform: rotate(55deg); }
+        40% { transform: rotate(35deg); }
+        60% { transform: rotate(45deg); }
+        100% { transform: rotate(25deg); }
+    }
+
+    @keyframes legFallCleanL {
+        0% { transform: rotate(-6deg); }
+        20% { transform: rotate(-25deg); }
+        40% { transform: rotate(-15deg); }
+        60% { transform: rotate(-20deg); }
+        100% { transform: rotate(-6deg); }
+    }
+
+    @keyframes legFallCleanR {
+        0% { transform: rotate(6deg); }
+        20% { transform: rotate(25deg); }
+        40% { transform: rotate(15deg); }
+        60% { transform: rotate(20deg); }
+        100% { transform: rotate(6deg); }
+    }
+
+    @keyframes hatFallClean {
+        0% { transform: translateX(-50%) rotate(0deg) scale(1); }
+        20% { transform: translateX(-50%) rotate(-30deg) scale(0.85); }
+        40% { transform: translateX(-50%) rotate(20deg) scale(1.05); }
+        60% { transform: translateX(-50%) rotate(-15deg) scale(0.92); }
+        80% { transform: translateX(-50%) rotate(8deg) scale(0.98); }
+        100% { transform: translateX(-50%) rotate(0deg) scale(1); }
+    }
+             </style>
+
+  <style>
+    /* ============================================================
+       بازی (GAME)
+       ============================================================ */
+    .game-word {
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: rgba(255,255,255,0.9);
+        padding: 30px 0;
+        background: rgba(255,255,255,0.03);
+        border-radius: 20px;
+        margin-bottom: 25px;
+        animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    @keyframes popIn {
+        0% {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .game-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .game-option {
+        padding: 18px 10px;
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 18px;
+        background: rgba(255,255,255,0.02);
+        font-size: 17px;
+        font-weight: bold;
+        color: rgba(255,255,255,0.7);
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        text-align: center;
+        min-height: 65px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .game-option:hover:not(.disabled) {
+        transform: scale(1.03);
+        border-color: rgba(108, 92, 231, 0.15);
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.9);
+    }
+
+    .game-option.correct {
+        background: rgba(0, 184, 148, 0.2) !important;
+        border-color: rgba(0, 184, 148, 0.3) !important;
+        color: #00b894 !important;
+        animation: correctAnim 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transform: scale(1.05);
+    }
+
+    @keyframes correctAnim {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.15) rotate(2deg); }
+        100% { transform: scale(1.05); }
+    }
+
+    .game-option.wrong {
+        background: rgba(225, 112, 85, 0.15) !important;
+        border-color: rgba(225, 112, 85, 0.2) !important;
+        color: #e17055 !important;
+        animation: wrongAnim 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes wrongAnim {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-8px); }
+        50% { transform: translateX(8px); }
+        75% { transform: translateX(-4px); }
+        100% { transform: translateX(0); }
+    }
+
+    .game-option.disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    .game-option .emoji-feedback {
+        position: absolute;
+        font-size: 36px;
+        top: -18px;
+        right: -8px;
+        animation: floatUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes floatUp {
+        0% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-50px) scale(1.5);
+        }
+    }
+
+    .game-progress {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: rgba(255,255,255,0.3);
+        font-size: 13px;
+    }
+
+    .game-progress .progress-bar {
+        flex: 1;
+        height: 4px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+        margin: 0 15px;
+        overflow: hidden;
+    }
+
+    .game-progress .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, rgba(0, 184, 148, 0.3), rgba(0, 206, 201, 0.3));
+        border-radius: 10px;
+        transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        width: 0%;
+    }
+
+    /* ============================================================
+       آموزش (STUDY)
+       ============================================================ */
+    .task-container {
+        background: rgba(255,255,255,0.03);
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 18px;
+        border: 1px solid rgba(255,255,255,0.03);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: all 0.5s ease;
+    }
+
+    .task-container h4 {
+        color: rgba(255,255,255,0.7);
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .task-container p {
+        color: rgba(255,255,255,0.4);
+        font-size: 13px;
+    }
+
+    .task-progress {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .task-bar {
+        flex: 1;
+        height: 6px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .task-fill {
+        height: 100%;
+        background: linear-gradient(90deg, rgba(0, 184, 148, 0.3), rgba(0, 206, 201, 0.3));
+        border-radius: 10px;
+        transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        width: 0%;
+    }
+
+    .study-card {
+        background: rgba(255,255,255,0.03);
+        border-radius: 22px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        min-height: 240px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 1px solid rgba(255,255,255,0.03);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .study-card .word {
+        font-size: 34px;
+        font-weight: bold;
+        color: rgba(255,255,255,0.9);
+        margin-bottom: 12px;
+    }
+
+    .study-card .meaning {
+        font-size: 20px;
+        color: rgba(162, 155, 254, 0.7);
+        margin-bottom: 10px;
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transform: translateY(10px);
+    }
+
+    .study-card .meaning.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .study-card .sentence {
+        font-size: 14px;
+        color: rgba(255,255,255,0.3);
+        font-style: italic;
+        margin-top: 10px;
+        padding: 12px;
+        background: rgba(255,255,255,0.03);
+        border-radius: 12px;
+        width: 100%;
+        border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .study-nav {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .study-nav button {
+        padding: 10px 22px;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        background: rgba(255,255,255,0.02);
+        color: rgba(255,255,255,0.5);
+        font-size: 13px;
+    }
+
+    .study-nav button:hover {
+        transform: translateY(-2px);
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.7);
+    }
+
+    .study-nav .btn-reveal {
+        background: rgba(108, 92, 231, 0.1);
+        color: #a29bfe;
+        border-color: rgba(108, 92, 231, 0.05);
+    }
+
+    .study-nav .btn-reveal:hover {
+        background: rgba(108, 92, 231, 0.15);
+    }
+
+    .study-nav .btn-sound {
+        background: rgba(255, 107, 107, 0.1);
+        color: #ff6b6b;
+        border-color: rgba(255, 107, 107, 0.05);
+    }
+
+    .study-nav .btn-sound:hover {
+        background: rgba(255, 107, 107, 0.2);
+    }
+
+    /* ============================================================
+       املا (SPELLING)
+       ============================================================ */
+    .spelling-container {
+        background: rgba(255,255,255,0.03);
+        border-radius: 22px;
+        padding: 25px;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.03);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .spelling-word {
+        font-size: 32px;
+        font-weight: bold;
+        color: rgba(255,255,255,0.9);
+        padding: 10px 0;
+    }
+
+    .spelling-meaning {
+        font-size: 20px;
+        color: rgba(162, 155, 254, 0.7);
+        margin-bottom: 20px;
+    }
+
+    .spelling-input-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .spelling-input-container input {
+        flex: 1;
+        padding: 14px 18px;
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 16px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background: rgba(255,255,255,0.03);
+        color: rgba(255,255,255,0.8);
+        direction: ltr;
+        text-align: center;
+        letter-spacing: 2px;
+    }
+
+    .spelling-input-container input:focus {
+        border-color: rgba(108, 92, 231, 0.2);
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.05);
+        background: rgba(255,255,255,0.05);
+    }
+
+    .spelling-input-container input::placeholder {
+        color: rgba(255,255,255,0.2);
+    }
+
+    .spelling-input-container .btn {
+        flex-shrink: 0;
+        padding: 14px 25px;
+    }
+
+    .spelling-result {
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        border-radius: 12px;
+        padding: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .spelling-result.correct {
+        color: #00b894;
+        background: rgba(0, 184, 148, 0.1);
+        animation: resultPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .spelling-result.wrong {
+        color: #e17055;
+        background: rgba(225, 112, 85, 0.1);
+        animation: resultPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes resultPop {
+        0% { transform: scale(0.8); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .spelling-progress {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: rgba(255,255,255,0.3);
+        font-size: 13px;
+    }
+
+    .spelling-progress .progress-bar {
+        flex: 1;
+        height: 4px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+        margin: 0 15px;
+        overflow: hidden;
+    }
+
+    .spelling-progress .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, rgba(108, 92, 231, 0.3), rgba(9, 132, 227, 0.3));
+        border-radius: 10px;
+        transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        width: 0%;
+    }
+
+    /* ============================================================
+       گرامر (GRAMMAR)
+       ============================================================ */
+    .grammar-lesson {
+        background: rgba(255,255,255,0.03);
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 12px;
+        border: 1px solid rgba(255,255,255,0.03);
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .grammar-lesson:hover {
+        transform: translateY(-2px);
+        background: rgba(255,255,255,0.05);
+    }
+
+    .grammar-lesson h4 {
+        color: rgba(255,255,255,0.7);
+        margin-bottom: 8px;
+        font-size: 15px;
+    }
+
+    .grammar-lesson .content {
+        display: none;
+        color: rgba(255,255,255,0.4);
+        line-height: 2;
+        padding: 10px 0;
+        font-size: 14px;
+    }
+
+    .grammar-lesson .content.show {
+        display: block;
+        animation: fadeIn 0.4s ease;
+    }
+
+    .grammar-lesson .complete-btn {
+        margin-top: 10px;
+        padding: 8px 18px;
+        border: 1px solid rgba(108, 92, 231, 0.1);
+        border-radius: 12px;
+        background: rgba(108, 92, 231, 0.05);
+        color: #a29bfe;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        font-size: 13px;
+    }
+
+    .grammar-lesson .complete-btn:hover {
+        background: rgba(108, 92, 231, 0.1);
+        transform: scale(1.03);
+    }
+
+    .grammar-lesson .complete-btn.done {
+        background: rgba(0, 184, 148, 0.1);
+        border-color: rgba(0, 184, 148, 0.1);
+        color: #00b894;
+        cursor: default;
+    }
+
+    .grammar-lesson .complete-btn.done:hover {
+        transform: none;
+    }
+
+    /* ============================================================
+       آمار (RANK) - نمایش همه کاربران
+       ============================================================ */
+    .rank-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .rank-list::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .rank-list::-webkit-scrollbar-track {
+        background: rgba(255,255,255,0.02);
+        border-radius: 10px;
+    }
+
+    .rank-list::-webkit-scrollbar-thumb {
+        background: rgba(108, 92, 231, 0.2);
+        border-radius: 10px;
+    }
+
+    .rank-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px 16px;
+        background: rgba(255,255,255,0.03);
+        border-radius: 14px;
+        transition: all 0.3s ease;
+        animation: slideIn 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.02);
+    }
+
+    .rank-item:hover {
+        transform: translateX(5px);
+        background: rgba(255,255,255,0.05);
+    }
+
+    .rank-item .rank-number {
+        font-weight: bold;
+        font-size: 16px;
+        min-width: 30px;
+        text-align: center;
+    }
+
+    /* مدال‌های طلا، نقره، برنز */
+    .rank-item.gold .rank-number {
+        color: #ffd700;
+        font-size: 22px;
+        text-shadow: 0 0 20px rgba(255,215,0,0.2);
+    }
+
+    .rank-item.gold {
+        background: rgba(255,215,0,0.05);
+        border: 1px solid rgba(255,215,0,0.1);
+    }
+
+    .rank-item.silver .rank-number {
+        color: #c0c0c0;
+        font-size: 20px;
+        text-shadow: 0 0 15px rgba(192,192,192,0.15);
+    }
+
+    .rank-item.silver {
+        background: rgba(192,192,192,0.03);
+        border: 1px solid rgba(192,192,192,0.05);
+    }
+
+    .rank-item.bronze .rank-number {
+        color: #cd7f32;
+        font-size: 20px;
+        text-shadow: 0 0 15px rgba(205,127,50,0.15);
+    }
+
+    .rank-item.bronze {
+        background: rgba(205,127,50,0.03);
+        border: 1px solid rgba(205,127,50,0.05);
+    }
+
+    .rank-item .rank-name {
+        flex: 1;
+        font-weight: bold;
+        color: rgba(255,255,255,0.7);
+        font-size: 14px;
+    }
+
+    .rank-item .rank-score {
+        background: rgba(0, 184, 148, 0.05);
+        border: 1px solid rgba(0, 184, 148, 0.05);
+        color: #00cec9;
+        padding: 4px 14px;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .rank-item.current-user {
+        background: rgba(108, 92, 231, 0.12) !important;
+        border: 1px solid rgba(108, 92, 231, 0.2) !important;
+        box-shadow: 0 0 30px rgba(108, 92, 231, 0.05);
+    }
+
+    .rank-footer {
+        text-align: center;
+        color: rgba(255,255,255,0.15);
+        padding: 10px;
+        border-top: 1px solid rgba(255,255,255,0.03);
+        margin-top: 10px;
+        font-size: 13px;
+    }
+
+    /* ============================================================
+       ریسپانسیو کلی
+       ============================================================ */
+    @media (max-width: 480px) {
+        .game-options {
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .game-option {
+            font-size: 14px;
+            padding: 14px 6px;
+            min-height: 55px;
+        }
+
+        .game-word {
+            font-size: 24px;
+            padding: 20px 0;
+        }
+
+        .study-card .word {
+            font-size: 28px;
+        }
+
+        .study-card .meaning {
+            font-size: 17px;
+        }
+
+        .study-nav button {
+            padding: 8px 14px;
+            font-size: 11px;
+        }
+
+        .spelling-word {
+            font-size: 26px;
+        }
+
+        .spelling-meaning {
+            font-size: 17px;
+        }
+
+        .spelling-input-container {
+            flex-direction: column;
+        }
+
+        .spelling-input-container input {
+            font-size: 18px;
+            padding: 12px;
+        }
+
+        .spelling-input-container .btn {
+            width: 100%;
+        }
+
+        .rank-item {
+            padding: 10px 12px;
+            gap: 10px;
+        }
+
+        .rank-item .rank-number {
+            font-size: 14px;
+            min-width: 25px;
+        }
+
+        .rank-item.gold .rank-number {
+            font-size: 18px;
+        }
+
+        .rank-item.silver .rank-number,
+        .rank-item.bronze .rank-number {
+            font-size: 17px;
+        }
+
+        .rank-item .rank-name {
+            font-size: 13px;
+        }
+
+        .rank-item .rank-score {
+            font-size: 12px;
+            padding: 3px 10px;
+        }
+    }
+  </style>
+
+  <script>
+    // ============================================================
+    //  DATA (داده‌های اصلی)
+    // ============================================================
+    let words = [];
+    let users = [];
+    let currentUser = '';
+    let streakData = { count: 0, lastDate: '' };
+    let tasks = [];
+    let taskProgress = {};
+    let grammars = [];
+    let grammarProgress = {};
+    let isAdmin = false;
+
+    // ============================================================
+    //  LOAD / SAVE (بارگذاری و ذخیره‌سازی)
+    // ============================================================
+    function loadData() {
+        const savedWords = localStorage.getItem('dragons_words');
+        const savedUsers = localStorage.getItem('dragons_users');
+        const savedStreak = localStorage.getItem('dragons_streak');
+        const savedTasks = localStorage.getItem('dragons_tasks');
+        const savedTaskProgress = localStorage.getItem('dragons_taskProgress');
+        const savedGrammars = localStorage.getItem('dragons_grammars');
+        const savedGrammarProgress = localStorage.getItem('dragons_grammarProgress');
+
+        if (savedWords) {
+            words = JSON.parse(savedWords);
+        } else {
+            words = [
+                { en: 'Apple', fa: 'سیب', sentence: 'I eat an apple every day.' },
+                { en: 'Book', fa: 'کتاب', sentence: 'This book is interesting.' },
+                { en: 'Car', fa: 'ماشین', sentence: 'My car is red.' },
+                { en: 'Dog', fa: 'سگ', sentence: 'The dog is barking.' },
+                { en: 'House', fa: 'خانه', sentence: 'Our house is big.' },
+                { en: 'School', fa: 'مدرسه', sentence: 'I go to school.' },
+                { en: 'Teacher', fa: 'معلم', sentence: 'My teacher is kind.' },
+                { en: 'Student', fa: 'دانش‌آموز', sentence: 'The student is studying.' },
+                { en: 'Friend', fa: 'دوست', sentence: 'He is my friend.' },
+                { en: 'Family', fa: 'خانواده', sentence: 'My family is small.' }
+            ];
+            saveData();
+        }
+
+        if (savedUsers) {
+            users = JSON.parse(savedUsers);
+        } else {
+            users = [];
+            saveData();
+        }
+
+        if (savedStreak) {
+            streakData = JSON.parse(savedStreak);
+        } else {
+            streakData = { count: 0, lastDate: '' };
+            saveData();
+        }
+
+        if (savedTasks) {
+            tasks = JSON.parse(savedTasks);
+        } else {
+            tasks = [];
+        }
+
+        if (savedTaskProgress) {
+            taskProgress = JSON.parse(savedTaskProgress);
+        } else {
+            taskProgress = {};
+        }
+
+        if (savedGrammars) {
+            grammars = JSON.parse(savedGrammars);
+        } else {
+            grammars = [{
+                title: 'زمان حال ساده (Simple Present)',
+                content: 'برای بیان حقایق و عادت‌ها استفاده می‌شود.\nمثال: I eat breakfast every day.'
+            }];
+            saveData();
+        }
+
+        if (savedGrammarProgress) {
+            grammarProgress = JSON.parse(savedGrammarProgress);
+        } else {
+            grammarProgress = {};
+        }
+    }
+
+    function saveData() {
+        localStorage.setItem('dragons_words', JSON.stringify(words));
+        localStorage.setItem('dragons_users', JSON.stringify(users));
+        localStorage.setItem('dragons_streak', JSON.stringify(streakData));
+        localStorage.setItem('dragons_tasks', JSON.stringify(tasks));
+        localStorage.setItem('dragons_taskProgress', JSON.stringify(taskProgress));
+        localStorage.setItem('dragons_grammars', JSON.stringify(grammars));
+        localStorage.setItem('dragons_grammarProgress', JSON.stringify(grammarProgress));
+    }
+
+    // ============================================================
+    //  LOGIN (ورود کاربر)
+    // ============================================================
+    function loginUser() {
+        const name = document.getElementById('usernameInput').value.trim();
+        if (!name) {
+            alert('لطفاً نام خود را وارد کنید!');
+            return;
+        }
+
+        currentUser = name;
+        
+        let user = users.find(u => u.name === name);
+        if (!user) {
+            users.push({ name: name, score: 0, words_learned: 0 });
+            saveData();
+        }
+
+        localStorage.setItem('dragons_currentUser', name);
+        
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('userScore').textContent = getUserScore(name);
+        updateStreakUI();
+        renderAll();
+        checkTaskOnLoad();
+        prepareGame();
+        prepareSpelling();
+    }
+
+    // ============================================================
+    //  STREAK (آتیش روزانه - دقیقاً هر ۲۴ ساعت یکبار)
+    // ============================================================
+    function updateStreakOnLoad() {
+        const today = new Date().toDateString();
+        
+        if (streakData.lastDate === today) {
+            return;
+        }
+        
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yestStr = yesterday.toDateString();
+
+        if (streakData.lastDate === yestStr) {
+            return;
+        }
+        
+        if (streakData.lastDate !== '') {
+            streakData.count = 0;
+        }
+        streakData.lastDate = '';
+        saveData();
+        updateStreakUI();
+    }
+
+    function handleStreak() {
+        const today = new Date().toDateString();
+        
+        if (streakData.lastDate === today) {
+            return;
+        }
+        
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yestStr = yesterday.toDateString();
+
+        if (streakData.lastDate === yestStr) {
+            streakData.count += 1;
+        } else {
+            streakData.count = 1;
+        }
+        
+        streakData.lastDate = today;
+        saveData();
+        updateStreakUI();
+        
+        const box = document.getElementById('streakBox');
+        box.style.animation = 'none';
+        setTimeout(() => {
+            box.style.animation = 'firePulse 2s ease-in-out infinite';
+        }, 10);
+        const numEl = document.getElementById('streakNumber');
+        numEl.style.transform = 'scale(1.6)';
+        setTimeout(() => numEl.style.transform = 'scale(1)', 300);
+    }
+
+    function updateStreakUI() {
+        document.getElementById('streakNumber').textContent = streakData.count || 0;
+    }
+
+    // ============================================================
+    //  TASK (تسک روزانه)
+    // ============================================================
+    function addTask() {
+        if (!isAdmin) {
+            alert('ابتدا وارد پنل مدیریت شوید!');
+            return;
+        }
+        const desc = document.getElementById('taskDesc').value.trim();
+        const target = parseInt(document.getElementById('taskTarget').value);
+        if (!desc || !target || target < 1) {
+            alert('لطفاً توضیح و تعداد هدف معتبر وارد کنید!');
+            return;
+        }
+
+        tasks.push({ desc, target });
+        document.getElementById('taskDesc').value = '';
+        document.getElementById('taskTarget').value = '';
+        saveData();
+        renderTask();
+        alert('تسک با موفقیت اضافه شد!');
+    }
+
+    function renderTask() {
+        const container = document.getElementById('taskContainer');
+        const descDisplay = document.getElementById('taskDescDisplay');
+        const fill = document.getElementById('taskFill');
+        const text = document.getElementById('taskProgressText');
+        const status = document.getElementById('taskStatus');
+
+        if (tasks.length === 0) {
+            descDisplay.textContent = 'هیچ تسکی تنظیم نشده';
+            fill.style.width = '0%';
+            text.textContent = '0%';
+            status.textContent = '⏳';
+            return;
+        }
+
+        const task = tasks[tasks.length - 1];
+        descDisplay.textContent = task.desc;
+
+        const progress = taskProgress[currentUser] || 0;
+        const percent = Math.min((progress / task.target) * 100, 100);
+        fill.style.width = percent + '%';
+        text.textContent = Math.round(percent) + '%';
+
+        if (percent >= 100) {
+            status.textContent = '✅ کامل شد!';
+            status.style.color = '#00b894';
+            container.style.borderColor = 'rgba(0, 184, 148, 0.2)';
+            const today = new Date().toDateString();
+            const key = 'task_done_' + currentUser + '_' + today;
+            if (!localStorage.getItem(key)) {
+                updateUserScore(currentUser, 10);
+                localStorage.setItem(key, 'true');
+                alert('🎉 تسک روزانه کامل شد! ۱۰ امتیاز گرفتید!');
+            }
+        } else {
+            status.textContent = '⏳';
+            status.style.color = 'rgba(255,255,255,0.3)';
+            container.style.borderColor = 'rgba(255,255,255,0.03)';
+        }
+    }
+
+    function checkTaskOnLoad() {
+        const today = new Date().toDateString();
+        const key = 'task_done_' + currentUser + '_' + today;
+        if (!localStorage.getItem(key)) {
+            taskProgress[currentUser] = 0;
+            saveData();
+        }
+        renderTask();
+    }
+
+    function updateTaskProgress() {
+        if (tasks.length === 0) return;
+        const task = tasks[tasks.length - 1];
+        const current = taskProgress[currentUser] || 0;
+        if (current < task.target) {
+            taskProgress[currentUser] = current + 1;
+            saveData();
+            renderTask();
+        }
+    }
+
+    // ============================================================
+    //  GRAMMAR (گرامر)
+    // ============================================================
+    function addGrammar() {
+        if (!isAdmin) {
+            alert('ابتدا وارد پنل مدیریت شوید!');
+            return;
+        }
+        const title = document.getElementById('grammarTitle').value.trim();
+        const content = document.getElementById('grammarContent').value.trim();
+        if (!title || !content) {
+            alert('لطفاً عنوان و متن درس را وارد کنید!');
+            return;
+        }
+
+        grammars.push({ title, content });
+        document.getElementById('grammarTitle').value = '';
+        document.getElementById('grammarContent').value = '';
+        saveData();
+        renderGrammar();
+        alert('درس گرامر با موفقیت اضافه شد!');
+    }
+
+    function renderGrammar() {
+        const container = document.getElementById('grammarList');
+        if (grammars.length === 0) {
+            container.innerHTML = '<p style="color:rgba(255,255,255,0.3);text-align:center;">هیچ درسی اضافه نشده!</p>';
+            return;
+        }
+
+        container.innerHTML = grammars.map((g, i) => {
+            const done = grammarProgress[currentUser + '_' + i] || false;
+            return `
+                <div class="grammar-lesson" onclick="toggleGrammar(${i})">
+                    <h4>${i+1}. ${g.title} ${done ? '✅' : ''}</h4>
+                    <div class="content" id="grammarContent_${i}">${g.content.replace(/\n/g, '<br>')}</div>
+                    <button class="complete-btn ${done ? 'done' : ''}" onclick="event.stopPropagation();completeGrammar(${i})">
+                        ${done ? '✅ انجام شد' : '📖 پایان درس و دریافت امتیاز'}
+                    </button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function toggleGrammar(index) {
+        const el = document.getElementById('grammarContent_' + index);
+        el.classList.toggle('show');
+    }
+
+    function completeGrammar(index) {
+        const key = currentUser + '_' + index;
+        if (grammarProgress[key]) {
+            alert('این درس قبلاً کامل شده!');
+            return;
+        }
+
+        const el = document.getElementById('grammarContent_' + index);
+        if (!el.classList.contains('show')) {
+            el.classList.add('show');
+        }
+
+        const lesson = document.querySelectorAll('.grammar-lesson')[index];
+        const rect = lesson.getBoundingClientRect();
+        const isVisible = rect.bottom <= window.innerHeight;
+
+        if (!isVisible) {
+            alert('لطفاً تا انتهای درس را مطالعه کنید!');
+            return;
+        }
+
+        grammarProgress[key] = true;
+        saveData();
+        updateUserScore(currentUser, 10);
+        renderGrammar();
+        alert('🎉 ۱۰ امتیاز دریافت کردید!');
+    }
+
+    // ============================================================
+    //  ADMIN LOCK (قفل پنل مدیریت)
+    // ============================================================
+    function checkAdminPassword() {
+        const pass = document.getElementById('adminPassword').value;
+        if (pass === '1729') {
+            isAdmin = true;
+            document.getElementById('adminLock').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            renderWordList();
+            renderTask();
+        } else {
+            alert('رمز اشتباه است!');
+        }
+    }
+
+    // ============================================================
+    //  WORDS MANAGEMENT (مدیریت کلمات)
+    // ============================================================
+    function renderWordList() {
+        if (!isAdmin) return;
+        const container = document.getElementById('wordListContainer');
+        if (words.length === 0) {
+            container.innerHTML = '<p style="color:rgba(255,255,255,0.3);text-align:center;">هیچ کلمه‌ای اضافه نشده!</p>';
+            return;
+        }
+        container.innerHTML = words.map((w, i) => `
+            <div class="word-item">
+                <div>
+                    <div class="word-en">${w.en}</div>
+                    <div class="word-fa">${w.fa}</div>
+                    ${w.sentence ? `<div style="font-size:12px;color:rgba(255,255,255,0.2);margin-top:4px;">📝 ${w.sentence}</div>` : ''}
+                </div>
+                <div class="word-actions">
+                    <button class="btn-edit" onclick="editWord(${i})">✏️</button>
+                    <button class="btn-delete" onclick="deleteWord(${i})">🗑</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function addWord() {
+        if (!isAdmin) {
+            alert('ابتدا وارد پنل مدیریت شوید!');
+            return;
+        }
+        const en = document.getElementById('wordEn').value.trim();
+        const fa = document.getElementById('wordFa').value.trim();
+        const sentence = document.getElementById('wordSentence').value.trim();
+        if (!en || !fa) { alert('لطفاً کلمه و معنی را وارد کنید!'); return; }
+        words.push({ en, fa, sentence: sentence || '' });
+        saveData();
+        renderWordList();
+        document.getElementById('wordEn').value = '';
+        document.getElementById('wordFa').value = '';
+        document.getElementById('wordSentence').value = '';
+        prepareGame();
+        renderStudy();
+        prepareSpelling();
+    }
+
+    function deleteWord(index) {
+        if (!isAdmin) return;
+        if (confirm(`آیا کلمه "${words[index].en}" حذف شود؟`)) {
+            words.splice(index, 1);
+            saveData();
+            renderWordList();
+            prepareGame();
+            renderStudy();
+            prepareSpelling();
+        }
+    }
+
+    function editWord(index) {
+        if (!isAdmin) return;
+        const w = words[index];
+        const newEn = prompt('کلمه انگلیسی:', w.en);
+        if (newEn === null) return;
+        const newFa = prompt('معنی فارسی:', w.fa);
+        if (newFa === null) return;
+        const newSentence = prompt('جمله مثال:', w.sentence || '');
+        if (newSentence === null) return;
+        words[index] = { en: newEn.trim(), fa: newFa.trim(), sentence: newSentence.trim() };
+        saveData();
+        renderWordList();
+        prepareGame();
+        renderStudy();
+        prepareSpelling();
+    }
+
+    // ============================================================
+    //  USER SCORE (امتیاز کاربر)
+    // ============================================================
+    function getUserScore(name) {
+        const u = users.find(user => user.name === name);
+        return u ? u.score : 0;
+    }
+
+    function updateUserScore(name, points) {
+        let u = users.find(user => user.name === name);
+        if (u) {
+            u.score += points;
+        } else {
+            users.push({ name: name, score: points, words_learned: 0 });
+        }
+        saveData();
+        document.getElementById('userScore').textContent = getUserScore(name);
+        renderRanking();
+    }
+
+    function updateUserWordsLearned(name) {
+        const u = users.find(user => user.name === name);
+        if (u) {
+            u.words_learned = (u.words_learned || 0) + 1;
+            saveData();
+        }
+    }
+
+    // ============================================================
+//  GAME (بازی چهارگزینه‌ای) - بدون باگ
+// ============================================================
+let gameQuestions = [];
+let gameIndex = 0;
+let gameScore = 0;
+let isAnswered = false;
+let gameRound = 0;
+
+function prepareGame() {
+    if (words.length < 4) {
+        const defaultWords = [
+            { en: 'Apple', fa: 'سیب' }, { en: 'Book', fa: 'کتاب' },
+            { en: 'Car', fa: 'ماشین' }, { en: 'Dog', fa: 'سگ' },
+            { en: 'House', fa: 'خانه' }, { en: 'School', fa: 'مدرسه' },
+            { en: 'Teacher', fa: 'معلم' }, { en: 'Student', fa: 'دانش‌آموز' },
+        ];
+        defaultWords.forEach(dw => {
+            if (!words.find(w => w.en === dw.en)) {
+                words.push({ ...dw, sentence: '' });
+            }
+        });
+        saveData();
+        if (isAdmin) renderWordList();
+    }
+
+    const shuffled = [...words].sort(() => Math.random() - 0.5);
+    gameQuestions = shuffled.slice(0, Math.min(10, shuffled.length));
+    
+    while (gameQuestions.length < 4) {
+        const fallback = [
+            { en: 'Apple', fa: 'سیب' }, { en: 'Book', fa: 'کتاب' },
+            { en: 'Car', fa: 'ماشین' }, { en: 'Dog', fa: 'سگ' }
+        ];
+        fallback.forEach(dw => {
+            if (!gameQuestions.find(q => q.en === dw.en) && !words.find(w => w.en === dw.en)) {
+                words.push({ ...dw, sentence: '' });
+                gameQuestions.push({ ...dw, sentence: '' });
+            }
+        });
+        saveData();
+    }
+
+    gameIndex = 0;
+    gameScore = 0;
+    gameRound = 0;
+    isAnswered = false;
+    updateGameUI();
+}
+
+function updateGameUI() {
+    if (gameQuestions.length === 0 || gameIndex >= gameQuestions.length) {
+        document.getElementById('gameWord').textContent = '🎉 تموم شد!';
+        document.getElementById('gameOptions').innerHTML = `
+            <button class="game-option" style="grid-column:span 2;background:rgba(108,92,231,0.2);color:#a29bfe;border:1px solid rgba(108,92,231,0.1);" onclick="prepareGame()">
+                🔄 بازی دوباره
+            </button>
+        `;
+        document.getElementById('gameCounter').textContent = `${gameIndex} / ${gameQuestions.length}`;
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('gameScore').textContent = `امتیاز: ${gameScore}`;
+        return;
+    }
+
+    const q = gameQuestions[gameIndex];
+    document.getElementById('gameWord').textContent = q.en;
+
+    const correct = q.fa;
+    let options = [correct];
+    const allFas = words.map(w => w.fa).filter(f => f !== correct);
+    const shuffledFas = allFas.sort(() => Math.random() - 0.5);
+    
+    for (let i = 0; i < Math.min(3, shuffledFas.length); i++) {
+        if (shuffledFas[i] && shuffledFas[i] !== correct) {
+            options.push(shuffledFas[i]);
+        }
+    }
+    
+    const fallbackOptions = ['???', '???', '???'];
+    while (options.length < 4) {
+        options.push(fallbackOptions[options.length - 1]);
+    }
+    
+    options = options.sort(() => Math.random() - 0.5);
+
+    const container = document.getElementById('gameOptions');
+    container.innerHTML = options.map((opt, idx) => `
+        <button class="game-option" data-index="${idx}" onclick="checkAnswer(this, '${correct.replace(/'/g, "\\'")}', '${opt.replace(/'/g, "\\'")}')">
+            ${opt}
+        </button>
+    `).join('');
+
+    document.getElementById('gameCounter').textContent = `${gameIndex + 1} / ${gameQuestions.length}`;
+    const progress = ((gameIndex + 1) / gameQuestions.length) * 100;
+    document.getElementById('progressFill').style.width = `${progress}%`;
+    document.getElementById('gameScore').textContent = `امتیاز: ${gameScore}`;
+    isAnswered = false;
+    gameRound++;
+}
+
+function checkAnswer(button, correct, selectedText) {
+    if (isAnswered) return;
+    isAnswered = true;
+
+    const buttons = document.querySelectorAll('.game-option');
+    const selected = button;
+    const selectedTextClean = selectedText.trim();
+    const correctTextClean = correct.trim();
+    const isCorrect = selectedTextClean === correctTextClean;
+
+    buttons.forEach(btn => {
+        btn.classList.add('disabled');
+        btn.style.cursor = 'default';
+    });
+
+    if (isCorrect) {
+        selected.classList.add('correct');
+        const emoji = document.createElement('span');
+        emoji.className = 'emoji-feedback';
+        emoji.textContent = '🎉';
+        selected.appendChild(emoji);
+        
+        gameScore += 10;
+        updateUserScore(currentUser, 10);
+        handleStreak();
+        updateTaskProgress();
+        jumpDragon();
+        
+    } else {
+        selected.classList.add('wrong');
+        buttons.forEach(btn => {
+            const btnText = btn.textContent.trim();
+            if (btnText === correctTextClean) {
+                btn.classList.add('correct');
+            }
+        });
+        const emoji = document.createElement('span');
+        emoji.className = 'emoji-feedback';
+        emoji.textContent = '😅';
+        selected.appendChild(emoji);
+        fallDragon();
+    }
+
+    document.getElementById('gameScore').textContent = `امتیاز: ${gameScore}`;
+    document.getElementById('userScore').textContent = getUserScore(currentUser);
+}
+
+function nextGameQuestion() {
+    if (!isAnswered && gameIndex < gameQuestions.length) {
+        alert('🥚 اول به سوال پاسخ بده!');
+        return;
+    }
+    gameIndex++;
+    updateGameUI();
+    if (gameIndex >= gameQuestions.length) {
+        renderRanking();
+    }
+}
+
+// ============================================================
+//  SPELLING (املا)
+// ============================================================
+let spellingQuestions = [];
+let spellingIndex = 0;
+let spellingScore = 0;
+let isSpellingAnswered = false;
+
+function prepareSpelling() {
+    if (words.length < 2) {
+        alert('حداقل ۲ کلمه برای بخش املا نیاز است!');
+        return;
+    }
+
+    const shuffled = [...words].sort(() => Math.random() - 0.5);
+    spellingQuestions = shuffled.slice(0, Math.min(10, shuffled.length));
+    
+    while (spellingQuestions.length < 2) {
+        const fallback = [
+            { en: 'Apple', fa: 'سیب' }, { en: 'Book', fa: 'کتاب' }
+        ];
+        fallback.forEach(dw => {
+            if (!spellingQuestions.find(q => q.en === dw.en)) {
+                spellingQuestions.push({ ...dw, sentence: '' });
+            }
+        });
+    }
+
+    spellingIndex = 0;
+    spellingScore = 0;
+    isSpellingAnswered = false;
+    updateSpellingUI();
+}
+
+function updateSpellingUI() {
+    if (spellingQuestions.length === 0 || spellingIndex >= spellingQuestions.length) {
+        document.getElementById('spellingWord').textContent = '🎉 تموم شد!';
+        document.getElementById('spellingMeaning').textContent = '';
+        document.getElementById('spellingInput').style.display = 'none';
+        document.querySelector('.spelling-input-container .btn').style.display = 'none';
+        document.getElementById('spellingResult').textContent = `امتیاز نهایی: ${spellingScore}`;
+        document.getElementById('spellingResult').className = 'spelling-result correct';
+        document.getElementById('spellingCounter').textContent = `${spellingIndex} / ${spellingQuestions.length}`;
+        document.getElementById('spellingProgressFill').style.width = '100%';
+        document.getElementById('spellingScore').textContent = `امتیاز: ${spellingScore}`;
+        document.querySelector('.spelling-container .btn-success').style.display = 'none';
+        return;
+    }
+
+    const q = spellingQuestions[spellingIndex];
+    document.getElementById('spellingWord').textContent = '✍️ کلمه را بنویسید';
+    document.getElementById('spellingMeaning').textContent = `معنی: ${q.fa}`;
+    document.getElementById('spellingInput').style.display = 'block';
+    document.getElementById('spellingInput').value = '';
+    document.getElementById('spellingInput').focus();
+    document.querySelector('.spelling-input-container .btn').style.display = 'block';
+    document.getElementById('spellingResult').textContent = '';
+    document.getElementById('spellingResult').className = 'spelling-result';
+    document.getElementById('spellingCounter').textContent = `${spellingIndex + 1} / ${spellingQuestions.length}`;
+    const progress = ((spellingIndex + 1) / spellingQuestions.length) * 100;
+    document.getElementById('spellingProgressFill').style.width = `${progress}%`;
+    document.getElementById('spellingScore').textContent = `امتیاز: ${spellingScore}`;
+    isSpellingAnswered = false;
+    document.querySelector('.spelling-container .btn-success').style.display = 'block';
+}
+
+function checkSpelling() {
+    if (isSpellingAnswered) return;
+    if (spellingQuestions.length === 0 || spellingIndex >= spellingQuestions.length) return;
+
+    const input = document.getElementById('spellingInput');
+    const userAnswer = input.value.trim();
+    const correctAnswer = spellingQuestions[spellingIndex].en;
+    const resultDiv = document.getElementById('spellingResult');
+
+    if (!userAnswer) {
+        resultDiv.textContent = '⚠️ لطفاً کلمه را بنویسید!';
+        resultDiv.className = 'spelling-result wrong';
+        return;
+    }
+
+    isSpellingAnswered = true;
+    const isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+
+    if (isCorrect) {
+        resultDiv.textContent = '✅ درست! 🎉';
+        resultDiv.className = 'spelling-result correct';
+        spellingScore += 10;
+        updateUserScore(currentUser, 10);
+        updateUserWordsLearned(currentUser);
+        handleStreak();
+        updateTaskProgress();
+        jumpDragon();
+    } else {
+        resultDiv.textContent = `❌ اشتباه! کلمه درست: ${correctAnswer}`;
+        resultDiv.className = 'spelling-result wrong';
+        fallDragon();
+    }
+
+    document.getElementById('spellingScore').textContent = `امتیاز: ${spellingScore}`;
+    document.getElementById('userScore').textContent = getUserScore(currentUser);
+    input.disabled = true;
+}
+
+function nextSpellingQuestion() {
+    if (!isSpellingAnswered && spellingIndex < spellingQuestions.length) {
+        alert('✍️ اول کلمه را بنویسید و بررسی کنید!');
+        return;
+    }
+    spellingIndex++;
+    document.getElementById('spellingInput').disabled = false;
+    updateSpellingUI();
+    if (spellingIndex >= spellingQuestions.length) {
+        renderRanking();
+    }
+}
+
+// ============================================================
+//  DRAGON ANIMATIONS (فرنگی دزد)
+// ============================================================
+function jumpDragon() {
+    const dragon = document.getElementById('dragon');
+    dragon.classList.remove('fall');
+    dragon.classList.add('jumping');
+    playDragonSound(true);
+    setTimeout(() => {
+        dragon.classList.remove('jumping');
+    }, 800);
+}
+
+function fallDragon() {
+    const dragon = document.getElementById('dragon');
+    dragon.classList.remove('jumping');
+    dragon.classList.add('fall');
+    playDragonSound(false);
+    setTimeout(() => {
+        dragon.classList.remove('fall');
+    }, 800);
+}
+
+function playDragonSound(isHappy) {
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        if (isHappy) {
+            oscillator.frequency.setValueAtTime(523, audioCtx.currentTime);
+            oscillator.frequency.setValueAtTime(659, audioCtx.currentTime + 0.1);
+            oscillator.frequency.setValueAtTime(784, audioCtx.currentTime + 0.2);
+            gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            oscillator.start(audioCtx.currentTime);
+            oscillator.stop(audioCtx.currentTime + 0.4);
+        } else {
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(300, audioCtx.currentTime);
+            oscillator.frequency.setValueAtTime(250, audioCtx.currentTime + 0.15);
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            oscillator.start(audioCtx.currentTime);
+            oscillator.stop(audioCtx.currentTime + 0.3);
+        }
+    } catch(e) {
+        console.log('Sound not supported');
+    }
+}
+
+// ============================================================
+//  STUDY (آموزش) با تلفظ
+// ============================================================
+let studyIndex = 0;
+let studyWords = [];
+
+function renderStudy() {
+    const uniqueWords = [];
+    const seen = new Set();
+    words.forEach(w => {
+        if (!seen.has(w.en)) {
+            seen.add(w.en);
+            uniqueWords.push(w);
+        }
+    });
+    studyWords = uniqueWords;
+
+    if (studyWords.length === 0) {
+        document.getElementById('studyWord').textContent = '❌ هیچ کلمه‌ای وجود ندارد!';
+        document.getElementById('studyMeaning').textContent = '';
+        document.getElementById('studyMeaning').classList.remove('show');
+        document.getElementById('studySentence').textContent = 'لطفاً ابتدا کلمه اضافه کنید.';
+        document.getElementById('studyCounter').textContent = '0';
+        document.getElementById('studyTotal').textContent = '0';
+        return;
+    }
+
+    if (studyIndex >= studyWords.length) studyIndex = 0;
+    if (studyIndex < 0) studyIndex = studyWords.length - 1;
+
+    const w = studyWords[studyIndex];
+    document.getElementById('studyWord').textContent = w.en || '???';
+    document.getElementById('studyMeaning').textContent = w.fa || '???';
+    document.getElementById('studyMeaning').classList.remove('show');
+    document.getElementById('studySentence').textContent = w.sentence || '❗ جمله‌ای برای این کلمه ثبت نشده.';
+    document.getElementById('studyCounter').textContent = studyIndex + 1;
+    document.getElementById('studyTotal').textContent = studyWords.length;
+    
+    speakWord(w.en);
+}
+
+function nextStudy() {
+    if (studyWords.length === 0) {
+        renderStudy();
+        return;
+    }
+    studyIndex = (studyIndex + 1) % studyWords.length;
+    renderStudy();
+    updateTaskProgress();
+    renderTask();
+}
+
+function prevStudy() {
+    if (studyWords.length === 0) {
+        renderStudy();
+        return;
+    }
+    studyIndex = (studyIndex - 1 + studyWords.length) % studyWords.length;
+    renderStudy();
+}
+
+function toggleMeaning() {
+    const el = document.getElementById('studyMeaning');
+    el.classList.toggle('show');
+}
+
+function speakWord(word) {
+    try {
+        const audio = new Audio();
+        audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(word)}&tl=en&client=tw-ob`;
+        audio.play().catch(() => {
+            try {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                speechSynthesis.speak(utterance);
+            } catch(err) {
+                console.log('TTS not available');
+            }
+        });
+    } catch(e) {
+        console.log('TTS error');
+    }
+}
+
+function speakCurrentWord() {
+    if (studyWords.length > 0 && studyIndex < studyWords.length) {
+        speakWord(studyWords[studyIndex].en);
+    }
+    }
+
+        // ============================================================
+    //  RANKING (رتبه‌بندی عمومی - نمایش همه کاربران از اول تا آخر)
+    //  این تابع تمام اطلاعات کاربران رو از localStorage میخونه،
+    //  بر اساس امتیاز مرتب میکنه و به ترتیب از اول تا آخر نشون میده.
+    //  هیچ کاربری حذف یا فیلتر نمیشه.
+    // ============================================================
+    function renderRanking() {
+        // ۱. گرفتن container آمار
+        const container = document.getElementById('rankList');
+        
+        // ۲. اگه هیچ کاربری توی لیست نباشه
+        if (!users || users.length === 0) {
+            container.innerHTML = `
+                <div style="text-align:center;color:rgba(255,255,255,0.3);padding:30px 0;">
+                    🐉 هنوز هیچ کاربری ثبت نشده!
+                    <br>
+                    <span style="font-size:13px;">اولین نفر باش و بازی رو شروع کن 🚀</span>
+                </div>
+            `;
+            return;
+        }
+
+        // ۳. ایجاد یک کپی از لیست کاربران و مرتب‌سازی بر اساس امتیاز (بیشترین به کمترین)
+        const sortedUsers = [...users].sort((a, b) => {
+            return (b.score || 0) - (a.score || 0);
+        });
+
+        // ۴. پیدا کردن جایگاه کاربر فعلی
+        const currentUserIndex = sortedUsers.findIndex(u => u.name === currentUser);
+        const currentUserRank = currentUserIndex + 1;
+        const totalUsers = sortedUsers.length;
+
+        // ۵. ساختن HTML برای نمایش همه کاربران
+        let html = '';
+
+        // ۶. حلقه برای نمایش همه کاربران از اول تا آخر
+        sortedUsers.forEach((user, index) => {
+            const rank = index + 1;
+            
+            let medal = '';
+            let rankClass = '';
+            if (rank === 1) {
+                medal = '🥇';
+                rankClass = 'gold';
+            } else if (rank === 2) {
+                medal = '🥈';
+                rankClass = 'silver';
+            } else if (rank === 3) {
+                medal = '🥉';
+                rankClass = 'bronze';
+            } else {
+                medal = `#${rank}`;
+            }
+
+            const isCurrentUser = user.name === currentUser;
+
+            html += `
+                <div class="rank-item ${rankClass} ${isCurrentUser ? 'current-user' : ''}">
+                    <div class="rank-number">${medal}</div>
+                    <div class="rank-name">
+                        ${user.name || 'ناشناس'}
+                        ${isCurrentUser ? ' 👈' : ''}
+                    </div>
+                    <div class="rank-score">⭐ ${user.score || 0}</div>
+                </div>
+            `;
+        });
+
+        // ۷. اضافه کردن فوتر با جایگاه کاربر فعلی
+        html += `
+            <div class="rank-footer">
+                📍 <strong>جایگاه شما:</strong> #${currentUserRank} از ${totalUsers} نفر
+                &nbsp;|&nbsp; 🔥 <strong>امتیاز:</strong> ${getUserScore(currentUser)}
+            </div>
+        `;
+
+        // ۸. نمایش در صفحه
+        container.innerHTML = html;
+    }
+
+    // ============================================================
+    //  TABS (تب‌ها)
+    // ============================================================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const tab = this.dataset.tab;
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`page-${tab}`).classList.add('active');
+
+            if (tab === 'admin') {
+                if (!isAdmin) {
+                    document.getElementById('adminLock').style.display = 'block';
+                    document.getElementById('adminPanel').style.display = 'none';
+                } else {
+                    document.getElementById('adminLock').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    renderWordList();
+                    renderTask();
+                }
+            }
+            if (tab === 'rank') {
+                renderRanking();  // رفرش آمار با هر بار کلیک
+            }
+            if (tab === 'game') {
+                prepareGame();
+            }
+            if (tab === 'study') {
+                renderStudy();
+                renderTask();
+            }
+            if (tab === 'spelling') {
+                prepareSpelling();
+            }
+            if (tab === 'grammar') {
+                renderGrammar();
+            }
+        });
+    });
+
+    // ============================================================
+    //  RENDER ALL
+    // ============================================================
+    function renderAll() {
+        renderStudy();
+        renderTask();
+        renderGrammar();
+        renderRanking();  // آمار همیشه رندر میشه
+        if (isAdmin) renderWordList();
+    }
+
+    // ============================================================
+    //  INIT (مقداردهی اولیه)
+    // ============================================================
+    function initApp() {
+        loadData();
+        updateStreakOnLoad();
+
+        const savedUser = localStorage.getItem('dragons_currentUser');
+        
+        if (savedUser) {
+            const userExists = users.find(u => u.name === savedUser);
+            if (userExists) {
+                currentUser = savedUser;
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('userScore').textContent = getUserScore(currentUser);
+                renderAll();
+                checkTaskOnLoad();
+                prepareGame();
+                prepareSpelling();
+                return;
+            } else {
+                localStorage.removeItem('dragons_currentUser');
+            }
+        }
+        
+        document.getElementById('loginOverlay').style.display = 'flex';
+    }
+
+    // ============================================================
+    //  START - اجرا بعد از لود کامل صفحه
+    // ============================================================
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        initApp();
+    } else {
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+        });
+    }
+
+    // ذخیره قبل از بسته شدن
+    window.addEventListener('beforeunload', () => {
+        if (currentUser) {
+            localStorage.setItem('dragons_currentUser', currentUser);
+        }
+        saveData();
+    });
+
+    // Auto-save هر ۱۰ ثانیه
+    setInterval(() => {
+        if (currentUser) {
+            localStorage.setItem('dragons_currentUser', currentUser);
+            saveData();
+        }
+    }, 10000);
+</script>
+
+</body>
+</html>
