@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>واژه‌آموز حرفه‌ای 🔥</title>
+</head>
+<body>
+
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <h2>👋 خوش آمدید!</h2>
+            <p style="color:#636e72;margin-bottom:15px;">نام خود را وارد کنید</p>
+            <input type="text" id="usernameInput" placeholder="نام شما..." />
+            <button class="btn btn-primary" onclick="loginUser()">ورود</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>📚 واژه‌آموز</h1>
+            <div class="header-left">
+                <div class="score-badge">⭐ <span id="userScore">0</span></div>
+                <div class="streak-box" id="streakBox">
+                    <span class="fire-icon">🔥</span>
+                    <span class="streak-number" id="streakNumber">0</span>
+                    <span style="font-size:14px;margin-right:2px;">روز</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="admin">📝 مدیریت</button>
+            <button class="tab-btn" data-tab="game">🎮 بازی</button>
+            <button class="tab-btn" data-tab="study">📖 آموزش</button>
+            <button class="tab-btn" data-tab="grammar">📝 گرامر</button>
+            <button class="tab-btn" data-tab="rank">🏆 آمار</button>
+        </div>
+
+        <!-- Admin -->
+        <div id="page-admin" class="page active">
+            <div id="adminLock" style="display:none;">
+                <div class="admin-form">
+                    <input type="password" id="adminPassword" placeholder="رمز ورود به پنل مدیریت" />
+                    <button class="btn btn-primary" onclick="checkAdminPassword()">ورود به پنل</button>
+                </div>
+            </div>
+            <div id="adminPanel" style="display:none;">
+                <h3 style="margin-bottom:15px;color:#2d3436;">➕ افزودن کلمه جدید</h3>
+                <div class="admin-form">
+                    <input type="text" id="wordEn" placeholder="کلمه به انگلیسی" />
+                    <input type="text" id="wordFa" placeholder="معنی فارسی" />
+                    <textarea id="wordSentence" placeholder="جمله مثال (اختیاری)"></textarea>
+                    <button class="btn btn-primary" onclick="addWord()">➕ افزودن کلمه</button>
+                </div>
+
+                <h3 style="margin:20px 0 10px;color:#2d3436;">📋 لیست کلمات</h3>
+                <div class="word-list" id="wordListContainer"></div>
+
+                <hr style="margin:20px 0;border:1px solid #f0f0f0;" />
+
+                <h3 style="margin-bottom:15px;color:#2d3436;">✅ تسک روزانه</h3>
+                <div class="admin-form">
+                    <input type="text" id="taskDesc" placeholder="توضیح تسک (مثلاً: ۲۰ کلمه آموزش ببین)" />
+                    <input type="number" id="taskTarget" placeholder="تعداد هدف (مثلاً: ۲۰)" />
+                    <button class="btn btn-gold" onclick="addTask()">➕ افزودن تسک</button>
+                </div>
+
+                <hr style="margin:20px 0;border:1px solid #f0f0f0;" />
+
+                <h3 style="margin-bottom:15px;color:#2d3436;">📝 افزودن درس گرامر</h3>
+                <div class="admin-form">
+                    <input type="text" id="grammarTitle" placeholder="عنوان درس (مثلاً: زمان حال ساده)" />
+                    <textarea id="grammarContent" placeholder="متن درس گرامر..." style="min-height:100px;"></textarea>
+                    <button class="btn btn-primary" onclick="addGrammar()">➕ افزودن درس</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game -->
+        <div id="page-game" class="page">
+            <div class="game-word" id="gameWord">Apple</div>
+            <div class="game-options" id="gameOptions">
+                <button class="game-option" data-index="0">سیب</button>
+                <button class="game-option" data-index="1">پرتقال</button>
+                <button class="game-option" data-index="2">موز</button>
+                <button class="game-option" data-index="3">انگور</button>
+            </div>
+            <div class="game-progress">
+                <span id="gameCounter">1 / 10</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width:10%"></div>
+                </div>
+                <span id="gameScore">امتیاز: 0</span>
+            </div>
+            <button class="btn btn-success" style="width:100%;margin-top:15px;" onclick="nextGameQuestion()">سوال بعدی ➜</button>
+        </div>
+
+        <!-- Study -->
+        <div id="page-study" class="page">
+            <div class="task-container" id="taskContainer">
+                <h4 style="color:#2d3436;">📋 تسک روزانه</h4>
+                <p id="taskDescDisplay" style="color:#636e72;">هیچ تسکی تنظیم نشده</p>
+                <div class="task-progress">
+                    <span id="taskProgressText">0%</span>
+                    <div class="task-bar">
+                        <div class="task-fill" id="taskFill" style="width:0%"></div>
+                    </div>
+                    <span id="taskStatus" style="font-weight:bold;color:#636e72;">⏳</span>
+                </div>
+            </div>
+
+            <div class="study-card" id="studyCard">
+                <div class="word" id="studyWord">Apple</div>
+                <div class="meaning" id="studyMeaning">سیب</div>
+                <div class="sentence" id="studySentence">I eat an apple every day.</div>
+            </div>
+            <div class="study-nav">
+                <button onclick="prevStudy()">◀ قبلی</button>
+                <button class="btn-reveal" onclick="toggleMeaning()">👁 معنی</button>
+                <button onclick="nextStudy()">بعدی ▶</button>
+            </div>
+            <p style="text-align:center;margin-top:10px;color:#636e72;font-size:14px;">
+                <span id="studyCounter">1</span> از <span id="studyTotal">0</span>
+            </p>
+        </div>
+
+        <!-- Grammar -->
+        <div id="page-grammar" class="page">
+            <h3 style="margin-bottom:15px;color:#2d3436;">📝 درس‌های گرامر</h3>
+            <div id="grammarList"></div>
+        </div>
+
+        <!-- Rank -->
+        <div id="page-rank" class="page">
+            <h3 style="margin-bottom:15px;color:#2d3436;">🏆 رتبه‌بندی کاربران</h3>
+            <div class="rank-list" id="rankList"></div>
+        </div>
+    </div>
+
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Vazir', 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        max-width: 500px;
+        width: 100%;
+        background: white;
+        border-radius: 30px;
+        padding: 25px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .header h1 {
+        font-size: 22px;
+        background: linear-gradient(135deg, #6c5ce7, #0984e3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .score-badge {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        color: white;
+        padding: 8px 18px;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 16px;
+        box-shadow: 0 4px 15px rgba(0, 206, 201, 0.3);
+    }
+
+    .streak-box {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        padding: 6px 16px 6px 12px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        box-shadow: 0 4px 20px rgba(238, 90, 36, 0.4);
+        animation: firePulse 1.2s infinite alternate;
+        cursor: default;
+        direction: ltr;
+    }
+
+    @keyframes firePulse {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 4px 20px rgba(238, 90, 36, 0.4);
+        }
+        100% {
+            transform: scale(1.04);
+            box-shadow: 0 6px 35px rgba(238, 90, 36, 0.7);
+        }
+    }
+
+    .streak-box .fire-icon {
+        font-size: 22px;
+        display: inline-block;
+        animation: fireDance 0.5s infinite alternate;
+    }
+
+    @keyframes fireDance {
+        0% {
+            transform: rotate(-8deg) scale(1);
+        }
+        100% {
+            transform: rotate(8deg) scale(1.2);
+        }
+    }
+
+    .streak-box .streak-number {
+        font-size: 20px;
+        min-width: 24px;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    .tabs {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        margin-bottom: 25px;
+    }
+
+    .tab-btn {
+        padding: 10px 5px;
+        border: none;
+        border-radius: 15px;
+        background: #f0f0f0;
+        color: #636e72;
+        font-weight: bold;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .tab-btn.active {
+        background: linear-gradient(135deg, #6c5ce7, #0984e3);
+        color: white;
+        box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+    }
+
+    .page {
+        display: none;
+        animation: fadeIn 0.4s ease;
+    }
+
+    .page.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .admin-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .admin-form input,
+    .admin-form textarea {
+        padding: 14px 18px;
+        border: 2px solid #dfe6e9;
+        border-radius: 15px;
+        font-size: 15px;
+        transition: all 0.3s;
+        background: #fafafa;
+    }
+
+    .admin-form input:focus,
+    .admin-form textarea:focus {
+        border-color: #6c5ce7;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+    }
+
+    .admin-form textarea {
+        min-height: 60px;
+        resize: vertical;
+    }
+
+    .btn {
+        padding: 14px;
+        border: none;
+        border-radius: 15px;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: white;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6c5ce7, #0984e3);
+        box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(108, 92, 231, 0.4);
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        box-shadow: 0 4px 15px rgba(0, 206, 201, 0.3);
+    }
+
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(0, 206, 201, 0.4);
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #e17055, #d63031);
+        box-shadow: 0 4px 15px rgba(214, 48, 49, 0.3);
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn-gold {
+        background: linear-gradient(135deg, #fdcb6e, #f39c12);
+        box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        color: #2d3436;
+    }
+
+    .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(243, 156, 18, 0.4);
+    }
+
+    .word-list {
+        max-height: 300px;
+        overflow-y: auto;
+        margin-top: 15px;
+    }
+
+    .word-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        margin-bottom: 8px;
+        border-right: 4px solid #6c5ce7;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .word-item .word-en {
+        font-weight: bold;
+        color: #2d3436;
+        font-size: 16px;
+    }
+
+    .word-item .word-fa {
+        color: #636e72;
+        font-size: 14px;
+    }
+
+    .word-item .word-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .word-item .word-actions button {
+        padding: 4px 12px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+    .btn-edit {
+        background: #fdcb6e;
+        color: #2d3436;
+    }
+
+    .btn-delete {
+        background: #e17055;
+        color: white;
+    }
+
+    .game-word {
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: #2d3436;
+        padding: 30px 0;
+        background: linear-gradient(135deg, #dfe6e9, #f5f7fa);
+        border-radius: 20px;
+        margin-bottom: 25px;
+        animation: popIn 0.5s ease;
+    }
+
+    @keyframes popIn {
+        0% {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .game-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .game-option {
+        padding: 20px 10px;
+        border: 3px solid #dfe6e9;
+        border-radius: 20px;
+        background: white;
+        font-size: 18px;
+        font-weight: bold;
+        color: #2d3436;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        min-height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .game-option:hover:not(.disabled) {
+        transform: scale(1.05);
+        border-color: #6c5ce7;
+        box-shadow: 0 4px 20px rgba(108, 92, 231, 0.2);
+    }
+
+    .game-option.correct {
+        background: #00b894 !important;
+        border-color: #00b894 !important;
+        color: white !important;
+        animation: correctAnim 0.5s ease;
+        transform: scale(1.1);
+    }
+
+    @keyframes correctAnim {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.3) rotate(5deg);
+        }
+        100% {
+            transform: scale(1.1);
+        }
+    }
+
+    .game-option.wrong {
+        background: #e17055 !important;
+        border-color: #e17055 !important;
+        color: white !important;
+        animation: wrongAnim 0.5s ease;
+    }
+
+    @keyframes wrongAnim {
+        0% {
+            transform: translateX(0);
+        }
+        25% {
+            transform: translateX(-10px);
+        }
+        50% {
+            transform: translateX(10px);
+        }
+        75% {
+            transform: translateX(-5px);
+        }
+        100% {
+            transform: translateX(0);
+        }
+    }
+
+    .game-option.disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    .game-option .emoji-feedback {
+        position: absolute;
+        font-size: 40px;
+        top: -20px;
+        right: -10px;
+        animation: floatUp 0.8s ease;
+    }
+
+    @keyframes floatUp {
+        0% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-60px) scale(1.5);
+        }
+    }
+
+    .game-progress {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #636e72;
+    }
+
+    .game-progress .progress-bar {
+        flex: 1;
+        height: 8px;
+        background: #dfe6e9;
+        border-radius: 10px;
+        margin: 0 15px;
+        overflow: hidden;
+    }
+
+    .game-progress .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #00b894, #00cec9);
+        border-radius: 10px;
+        transition: width 0.5s ease;
+        width: 0%;
+    }
+
+    .study-card {
+        background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        border-radius: 25px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        min-height: 250px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        animation: popIn 0.4s ease;
+        border: 2px solid #f0f0f0;
+    }
+
+    .study-card .word {
+        font-size: 36px;
+        font-weight: bold;
+        color: #2d3436;
+        margin-bottom: 15px;
+    }
+
+    .study-card .meaning {
+        font-size: 20px;
+        color: #6c5ce7;
+        margin-bottom: 10px;
+        opacity: 0;
+        transition: all 0.5s ease;
+        transform: translateY(10px);
+    }
+
+    .study-card .meaning.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .study-card .sentence {
+        font-size: 16px;
+        color: #636e72;
+        font-style: italic;
+        margin-top: 10px;
+        padding: 15px;
+        background: #f0f0f0;
+        border-radius: 12px;
+        width: 100%;
+    }
+
+    .study-nav {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+        justify-content: center;
+    }
+
+    .study-nav button {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: #dfe6e9;
+        color: #2d3436;
+    }
+
+    .study-nav button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .study-nav .btn-reveal {
+        background: linear-gradient(135deg, #6c5ce7, #0984e3);
+        color: white;
+    }
+
+    .rank-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .rank-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 14px 18px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        transition: all 0.3s;
+        animation: slideIn 0.3s ease;
+    }
+
+    .rank-item:hover {
+        transform: translateX(5px);
+        background: #f0f0f0;
+    }
+
+    .rank-item .rank-number {
+        font-weight: bold;
+        font-size: 18px;
+        color: #6c5ce7;
+        min-width: 35px;
+    }
+
+    .rank-item .rank-name {
+        flex: 1;
+        font-weight: bold;
+        color: #2d3436;
+    }
+
+    .rank-item .rank-score {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        color: white;
+        padding: 4px 16px;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .rank-item:first-child .rank-number {
+        color: #fdcb6e;
+        font-size: 22px;
+    }
+
+    .rank-item:nth-child(2) .rank-number {
+        color: #b2bec3;
+        font-size: 20px;
+    }
+
+    .rank-item:nth-child(3) .rank-number {
+        color: #e17055;
+        font-size: 20px;
+    }
+
+    .task-container {
+        background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 2px solid #f0f0f0;
+    }
+
+    .task-progress {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .task-bar {
+        flex: 1;
+        height: 12px;
+        background: #dfe6e9;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .task-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #00b894, #00cec9);
+        border-radius: 10px;
+        transition: width 0.5s ease;
+        width: 0%;
+    }
+
+    .task-complete {
+        background: #00b894 !important;
+        color: white !important;
+        animation: completeAnim 0.6s ease;
+    }
+
+    @keyframes completeAnim {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .grammar-lesson {
+        background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border: 2px solid #f0f0f0;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .grammar-lesson:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .grammar-lesson h4 {
+        color: #2d3436;
+        margin-bottom: 10px;
+    }
+
+    .grammar-lesson .content {
+        display: none;
+        color: #636e72;
+        line-height: 2;
+        padding: 10px 0;
+    }
+
+    .grammar-lesson .content.show {
+        display: block;
+        animation: fadeIn 0.4s ease;
+    }
+
+    .grammar-lesson .complete-btn {
+        margin-top: 10px;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 10px;
+        background: #6c5ce7;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .grammar-lesson .complete-btn:hover {
+        transform: scale(1.05);
+    }
+
+    .grammar-lesson .complete-btn.done {
+        background: #00b894;
+        cursor: default;
+    }
+
+    .grammar-lesson .complete-btn.done:hover {
+        transform: none;
+    }
+
+    .login-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+    }
+
+    .login-box {
+        background: white;
+        padding: 40px;
+        border-radius: 30px;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        animation: popIn 0.5s ease;
+    }
+
+    .login-box h2 {
+        margin-bottom: 20px;
+        color: #2d3436;
+    }
+
+    .login-box input {
+        width: 100%;
+        padding: 14px;
+        border: 2px solid #dfe6e9;
+        border-radius: 15px;
+        font-size: 16px;
+        margin-bottom: 15px;
+        transition: all 0.3s;
+    }
+
+    .login-box input:focus {
+        border-color: #6c5ce7;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+    }
+
+    .login-box .btn {
+        width: 100%;
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 15px;
+        }
+        .tabs {
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+        .tab-btn {
+            font-size: 10px;
+            padding: 8px 2px;
+        }
+        .game-options {
+            grid-template-columns: 1fr 1fr;
+        }
+        .game-option {
+            font-size: 15px;
+            padding: 15px 8px;
+            min-height: 60px;
+        }
+        .game-word {
+            font-size: 26px;
+            padding: 20px 0;
+        }
+        .header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+        }
+        .header-left {
+            justify-content: space-between;
+        }
+        .streak-box {
+            font-size: 14px;
+            padding: 4px 14px 4px 10px;
+        }
+    }
+                                 
+  </style>
+
+  <script>
+    // ============================================================
+    //  DATA
+    // ============================================================
+    let words = [];
+    let users = [];
+    let currentUser = '';
+    let streakData = { count: 0, lastDate: '' };
+    let tasks = [];
+    let taskProgress = {};
+    let grammars = [];
+    let grammarProgress = {};
+    let isAdmin = false;
+
+    // ============================================================
+    //  LOAD / SAVE
+    // ============================================================
+    function loadData() {
+        const savedWords = localStorage.getItem('myWords');
+        const savedUsers = localStorage.getItem('myUsers');
+        const savedStreak = localStorage.getItem('myStreak');
+        const savedTasks = localStorage.getItem('myTasks');
+        const savedTaskProgress = localStorage.getItem('myTaskProgress');
+        const savedGrammars = localStorage.getItem('myGrammars');
+        const savedGrammarProgress = localStorage.getItem('myGrammarProgress');
+
+        if (savedWords) words = JSON.parse(savedWords);
+        else {
+            words = [
+                { en: 'Apple', fa: 'سیب', sentence: 'I eat an apple every day.' },
+                { en: 'Book', fa: 'کتاب', sentence: 'This book is interesting.' },
+                { en: 'Car', fa: 'ماشین', sentence: 'My car is red.' },
+                { en: 'Dog', fa: 'سگ', sentence: 'The dog is barking.' },
+                { en: 'House', fa: 'خانه', sentence: 'Our house is big.' },
+                { en: 'School', fa: 'مدرسه', sentence: 'I go to school.' },
+                { en: 'Teacher', fa: 'معلم', sentence: 'My teacher is kind.' },
+                { en: 'Student', fa: 'دانش‌آموز', sentence: 'The student is studying.' },
+                { en: 'Friend', fa: 'دوست', sentence: 'He is my friend.' },
+                { en: 'Family', fa: 'خانواده', sentence: 'My family is small.' },
+            ];
+            saveData();
+        }
+
+        if (savedUsers) users = JSON.parse(savedUsers);
+        else {
+            users = [];
+            saveData();
+        }
+
+        if (savedStreak) streakData = JSON.parse(savedStreak);
+        else {
+            streakData = { count: 0, lastDate: '' };
+            saveData();
+        }
+
+        if (savedTasks) tasks = JSON.parse(savedTasks);
+        else tasks = [];
+
+        if (savedTaskProgress) taskProgress = JSON.parse(savedTaskProgress);
+        else taskProgress = {};
+
+        if (savedGrammars) grammars = JSON.parse(savedGrammars);
+        else {
+            grammars = [{
+                title: 'زمان حال ساده (Simple Present)',
+                content: 'برای بیان حقایق و عادت‌ها استفاده می‌شود.\nمثال: I eat breakfast every day.'
+            }];
+            saveData();
+        }
+
+        if (savedGrammarProgress) grammarProgress = JSON.parse(savedGrammarProgress);
+        else grammarProgress = {};
+    }
+
+    function saveData() {
+        localStorage.setItem('myWords', JSON.stringify(words));
+        localStorage.setItem('myUsers', JSON.stringify(users));
+        localStorage.setItem('myStreak', JSON.stringify(streakData));
+        localStorage.setItem('myTasks', JSON.stringify(tasks));
+        localStorage.setItem('myTaskProgress', JSON.stringify(taskProgress));
+        localStorage.setItem('myGrammars', JSON.stringify(grammars));
+        localStorage.setItem('myGrammarProgress', JSON.stringify(grammarProgress));
+    }
+
+    // ============================================================
+    //  LOGIN
+    // ============================================================
+    function loginUser() {
+        const name = document.getElementById('usernameInput').value.trim();
+        if (!name) {
+            alert('لطفاً نام خود را وارد کنید!');
+            return;
+        }
+
+        currentUser = name;
+        if (!users.find(u => u.name === name)) {
+            users.push({ name: name, score: 0 });
+            saveData();
+        }
+
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('userScore').textContent = getUserScore(name);
+        updateStreakUI();
+        renderAll();
+        checkTaskOnLoad();
+    }
+
+    // ============================================================
+    //  STREAK (روزانه)
+    // ============================================================
+    function updateStreakOnLoad() {
+        const today = new Date().toDateString();
+        if (streakData.lastDate === today) {
+            // امروز ثبت شده
+        } else {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yestStr = yesterday.toDateString();
+
+            if (streakData.lastDate === yestStr) {
+                // دیروز ثبت شده
+            } else {
+                if (streakData.lastDate !== '') {
+                    streakData.count = 0;
+                }
+                streakData.lastDate = '';
+                saveData();
+            }
+        }
+        updateStreakUI();
+    }
+
+    function handleStreak() {
+        const today = new Date().toDateString();
+        if (streakData.lastDate === today) {
+            // امروز قبلاً ثبت شده
+        } else {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yestStr = yesterday.toDateString();
+
+            if (streakData.lastDate === yestStr) {
+                streakData.count += 1;
+            } else {
+                streakData.count = 1;
+            }
+            streakData.lastDate = today;
+            saveData();
+        }
+        updateStreakUI();
+        const box = document.getElementById('streakBox');
+        box.style.animation = 'none';
+        setTimeout(() => {
+            box.style.animation = 'firePulse 1.2s infinite alternate';
+        }, 10);
+        const numEl = document.getElementById('streakNumber');
+        numEl.style.transform = 'scale(1.6)';
+        setTimeout(() => numEl.style.transform = 'scale(1)', 300);
+    }
+
+    function updateStreakUI() {
+        document.getElementById('streakNumber').textContent = streakData.count;
+    }
+
+    // ============================================================
+    //  TASK (تسک روزانه)
+    // ============================================================
+    function addTask() {
+        if (!isAdmin) {
+            alert('ابتدا وارد پنل مدیریت شوید!');
+            return;
+        }
+        const desc = document.getElementById('taskDesc').value.trim();
+        const target = parseInt(document.getElementById('taskTarget').value);
+        if (!desc || !target || target < 1) {
+            alert('لطفاً توضیح و تعداد هدف معتبر وارد کنید!');
+            return;
+        }
+
+        tasks.push({ desc, target });
+        document.getElementById('taskDesc').value = '';
+        document.getElementById('taskTarget').value = '';
+        saveData();
+        renderTask();
+        alert('تسک با موفقیت اضافه شد!');
+    }
+
+    function renderTask() {
+        const container = document.getElementById('taskContainer');
+        const descDisplay = document.getElementById('taskDescDisplay');
+        const fill = document.getElementById('taskFill');
+        const text = document.getElementById('taskProgressText');
+        const status = document.getElementById('taskStatus');
+
+        if (tasks.length === 0) {
+            descDisplay.textContent = 'هیچ تسکی تنظیم نشده';
+            fill.style.width = '0%';
+            text.textContent = '0%';
+            status.textContent = '⏳';
+            return;
+        }
+
+        const task = tasks[tasks.length - 1];
+        descDisplay.textContent = task.desc;
+
+        const progress = taskProgress[currentUser] || 0;
+        const percent = Math.min((progress / task.target) * 100, 100);
+        fill.style.width = percent + '%';
+        text.textContent = Math.round(percent) + '%';
+
+        if (percent >= 100) {
+            status.textContent = '✅ کامل شد!';
+            status.style.color = '#00b894';
+            container.style.borderColor = '#00b894';
+            const today = new Date().toDateString();
+            const key = 'task_done_' + currentUser + '_' + today;
+            if (!localStorage.getItem(key)) {
+                updateUserScore(currentUser, 10);
+                localStorage.setItem(key, 'true');
+                alert('🎉 تسک روزانه کامل شد! ۱۰ امتیاز گرفتید!');
+            }
+        } else {
+            status.textContent = '⏳';
+            status.style.color = '#636e72';
+            container.style.borderColor = '#f0f0f0';
+        }
+    }
+
+    function checkTaskOnLoad() {
+        const today = new Date().toDateString();
+        const key = 'task_done_' + currentUser + '_' + today;
+        if (!localStorage.getItem(key)) {
+            taskProgress[currentUser] = 0;
+            saveData();
+        }
+        renderTask();
+    }
+
+    function updateTaskProgress() {
+        if (tasks.length === 0) return;
+        const task = tasks[tasks.length - 1];
+        const current = taskProgress[currentUser] || 0;
+        if (current < task.target) {
+            taskProgress[currentUser] = current + 1;
+            saveData();
+            renderTask();
+        }
+    }
+
+    // ============================================================
+    //  GRAMMAR (گرامر)
+    // ============================================================
+    function addGrammar() {
+        if (!isAdmin) {
+            alert('ابتدا وارد پنل مدیریت شوید!');
+            return;
+        }
+        const title = document.getElementById('grammarTitle').value.trim();
+        const content = document.getElementById('grammarContent').value.trim();
+        if (!title || !content) {
+            alert('لطفاً عنوان و متن درس را وارد کنید!');
+            return;
+        }
+
+        grammars.push({ title, content });
+        document.getElementById('grammarTitle').value = '';
+        document.getElementById('grammarContent').value = '';
+        saveData();
+        renderGrammar();
+        alert('درس گرامر با موفقیت اضافه شد!');
+    }
+
+    function renderGrammar() {
+        const container = document.getElementById('grammarList');
+        if (grammars.length === 0) {
+            container.innerHTML = '<p style="color:#636e72;text-align:center;">هیچ درسی اضافه نشده!</p>';
+            return;
+        }
+
+        container.innerHTML = grammars.map((g, i) => {
+            const done = grammarProgress[currentUser + '_' + i] || false;
+            return `
+                <div class="grammar-lesson" onclick="toggleGrammar(${i})">
+                    <h4>${i+1}. ${g.title} ${done ? '✅' : ''}</h4>
+                    <div class="content" id="grammarContent_${i}">${g.content.replace(/\n/g, '<br>')}</div>
+                    <button class="complete-btn ${done ? 'done' : ''}" onclick="event.stopPropagation();completeGrammar(${i})">
+                        ${done ? '✅ انجام شد' : '📖 پایان درس و دریافت امتیاز'}
+                    </button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function toggleGrammar(index) {
+        const el = document.getElementById('grammarContent_' + index);
+        el.classList.toggle('show');
+    }
+
+    function completeGrammar(index) {
+        const key = currentUser + '_' + index;
+        if (grammarProgress[key]) {
+            alert('این درس قبلاً کامل شده!');
+            return;
+        }
+
+        const el = document.getElementById('grammarContent_' + index);
+        if (!el.classList.contains('show')) {
+            el.classList.add('show');
+        }
+
+        const lesson = document.querySelectorAll('.grammar-lesson')[index];
+        const rect = lesson.getBoundingClientRect();
+        const isVisible = rect.bottom <= window.innerHeight;
+
+        if (!isVisible) {
+            alert('لطفاً تا انتهای درس را مطالعه کنید!');
+            return;
+        }
+
+        grammarProgress[key] = true;
+        saveData();
+        updateUserScore(currentUser, 10);
+        renderGrammar();
+        alert('🎉 ۱۰ امتیاز دریافت کردید!');
+    }
+
+    // ============================================================
+    //  ADMIN LOCK
+    // ============================================================
+    function checkAdminPassword() {
+        const pass = document.getElementById('adminPassword').value;
+        if (pass === '1729') {
+            isAdmin = true;
+            document.getElementById('adminLock').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            renderWordList();
+            renderTask();
+        } else {
+            alert('رمز اشتباه است!');
+        }
+    }
+
+    // ============================================================
+    //  WORDS MANAGEMENT
+    // ============================================================
+    function renderWordList() {
+        if (!isAdmin) return;
+        const container = document.getElementById('wordListContainer');
+        if (words.length === 0) {
+            container.innerHTML = '<p style="color:#636e72;text-align:center;">هیچ کلمه‌ای اضافه نشده!</p>';
+            return;
+        }
+        container.innerHTML = words.map((w, i) => `
+            <div class="word-item">
+                <div>
+                    <div class="word-en">${w.en}</div>
+                    <div class="word-fa">${w.fa}</div>
+                    ${w.sentence ? `<div style="font-size:12px;color:#b2bec3;margin-top:4px;">📝 ${w.sentence}</div>` : ''}
+                </div>
+                <div class="word-actions">
+                    <button class="btn-edit" onclick="editWord(${i})">✏️</button>
+                    <button class="btn-delete" onclick="deleteWord(${i})">🗑</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function addWord() {
+        if (!isAdmin) {
+            alert('ابتدا وارد پنل مدیریت شوید!');
+            return;
+        }
+        const en = document.getElementById('wordEn').value.trim();
+        const fa = document.getElementById('wordFa').value.trim();
+        const sentence = document.getElementById('wordSentence').value.trim();
+        if (!en || !fa) { alert('لطفاً کلمه و معنی را وارد کنید!'); return; }
+        words.push({ en, fa, sentence: sentence || '' });
+        saveData();
+        renderWordList();
+        document.getElementById('wordEn').value = '';
+        document.getElementById('wordFa').value = '';
+        document.getElementById('wordSentence').value = '';
+        prepareGame();
+        renderStudy();
+    }
+
+    function deleteWord(index) {
+        if (!isAdmin) return;
+        if (confirm(`آیا کلمه "${words[index].en}" حذف شود؟`)) {
+            words.splice(index, 1);
+            saveData();
+            renderWordList();
+            prepareGame();
+            renderStudy();
+        }
+    }
+
+    function editWord(index) {
+        if (!isAdmin) return;
+        const w = words[index];
+        const newEn = prompt('کلمه انگلیسی:', w.en);
+        if (newEn === null) return;
+        const newFa = prompt('معنی فارسی:', w.fa);
+        if (newFa === null) return;
+        const newSentence = prompt('جمله مثال:', w.sentence || '');
+        if (newSentence === null) return;
+        words[index] = { en: newEn.trim(), fa: newFa.trim(), sentence: newSentence.trim() };
+        saveData();
+        renderWordList();
+        prepareGame();
+        renderStudy();
+    }
+
+    // ============================================================
+    //  USER SCORE
+    // ============================================================
+    function getUserScore(name) {
+        const u = users.find(user => user.name === name);
+        return u ? u.score : 0;
+    }
+
+    function updateUserScore(name, points) {
+        const u = users.find(user => user.name === name);
+        if (u) {
+            u.score += points;
+            saveData();
+            document.getElementById('userScore').textContent = u.score;
+            renderRanking();
+        }
+    }
+
+        // ============================================================
+    //  GAME (بازی چهارگزینه‌ای)
+    // ============================================================
+    let gameQuestions = [];
+    let gameIndex = 0;
+    let gameScore = 0;
+    let isAnswered = false;
+
+    function prepareGame() {
+        if (words.length < 4) {
+            const defaultWords = [
+                { en: 'Apple', fa: 'سیب' }, { en: 'Book', fa: 'کتاب' },
+                { en: 'Car', fa: 'ماشین' }, { en: 'Dog', fa: 'سگ' },
+                { en: 'House', fa: 'خانه' }, { en: 'School', fa: 'مدرسه' },
+                { en: 'Teacher', fa: 'معلم' }, { en: 'Student', fa: 'دانش‌آموز' },
+            ];
+            defaultWords.forEach(dw => {
+                if (!words.find(w => w.en === dw.en)) {
+                    words.push({ ...dw, sentence: '' });
+                }
+            });
+            saveData();
+            if (isAdmin) renderWordList();
+        }
+
+        const shuffled = [...words].sort(() => Math.random() - 0.5);
+        gameQuestions = shuffled.slice(0, Math.min(10, shuffled.length));
+        gameIndex = 0;
+        gameScore = 0;
+        isAnswered = false;
+        updateGameUI();
+    }
+
+    function updateGameUI() {
+        if (gameQuestions.length === 0 || gameIndex >= gameQuestions.length) {
+            document.getElementById('gameWord').textContent = '🎉 تموم شد!';
+            document.getElementById('gameOptions').innerHTML = `
+                <button class="game-option" style="grid-column:span 2;background:#6c5ce7;color:white;" onclick="prepareGame()">
+                    🔄 بازی دوباره
+                </button>
+            `;
+            document.getElementById('gameCounter').textContent = `${gameIndex} / ${gameQuestions.length}`;
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('gameScore').textContent = `امتیاز: ${gameScore}`;
+            return;
+        }
+
+        const q = gameQuestions[gameIndex];
+        document.getElementById('gameWord').textContent = q.en;
+
+        const correct = q.fa;
+        let options = [correct];
+        const allFas = words.map(w => w.fa).filter(f => f !== correct);
+        const shuffledFas = allFas.sort(() => Math.random() - 0.5);
+        for (let i = 0; i < Math.min(3, shuffledFas.length); i++) {
+            options.push(shuffledFas[i]);
+        }
+        while (options.length < 4) options.push('???');
+        options = options.sort(() => Math.random() - 0.5);
+
+        const container = document.getElementById('gameOptions');
+        container.innerHTML = options.map((opt, idx) => `
+            <button class="game-option" data-index="${idx}" onclick="checkAnswer(${idx}, '${correct.replace(/'/g, "\\'")}')">
+                ${opt}
+            </button>
+        `).join('');
+
+        document.getElementById('gameCounter').textContent = `${gameIndex + 1} / ${gameQuestions.length}`;
+        const progress = ((gameIndex + 1) / gameQuestions.length) * 100;
+        document.getElementById('progressFill').style.width = `${progress}%`;
+        document.getElementById('gameScore').textContent = `امتیاز: ${gameScore}`;
+        isAnswered = false;
+    }
+
+    function checkAnswer(index, correct) {
+        if (isAnswered) return;
+        isAnswered = true;
+
+        const buttons = document.querySelectorAll('.game-option');
+        const selected = buttons[index];
+        const isCorrect = selected.textContent === correct;
+
+        buttons.forEach(btn => btn.classList.add('disabled'));
+
+        if (isCorrect) {
+            selected.classList.add('correct');
+            const emoji = document.createElement('span');
+            emoji.className = 'emoji-feedback';
+            emoji.textContent = '🎉';
+            selected.appendChild(emoji);
+            gameScore += 10;
+            updateUserScore(currentUser, 10);
+            handleStreak();
+            updateTaskProgress();
+        } else {
+            selected.classList.add('wrong');
+            buttons.forEach(btn => {
+                if (btn.textContent === correct) btn.classList.add('correct');
+            });
+            const emoji = document.createElement('span');
+            emoji.className = 'emoji-feedback';
+            emoji.textContent = '😅';
+            selected.appendChild(emoji);
+        }
+
+        document.getElementById('gameScore').textContent = `امتیاز: ${gameScore}`;
+        document.getElementById('userScore').textContent = getUserScore(currentUser);
+    }
+
+    function nextGameQuestion() {
+        if (!isAnswered && gameIndex < gameQuestions.length) {
+            alert('اول به سوال پاسخ بده!');
+            return;
+        }
+        gameIndex++;
+        updateGameUI();
+        if (gameIndex >= gameQuestions.length) renderRanking();
+    }
+
+    // ============================================================
+    //  STUDY (آموزش)
+    // ============================================================
+    let studyIndex = 0;
+
+    function renderStudy() {
+        if (words.length === 0) {
+            document.getElementById('studyWord').textContent = '❌ هیچ کلمه‌ای وجود ندارد!';
+            document.getElementById('studyMeaning').textContent = '';
+            document.getElementById('studyMeaning').classList.remove('show');
+            document.getElementById('studySentence').textContent = 'لطفاً ابتدا کلمه اضافه کنید.';
+            document.getElementById('studyCounter').textContent = '0';
+            document.getElementById('studyTotal').textContent = '0';
+            return;
+        }
+        if (studyIndex >= words.length) studyIndex = 0;
+        if (studyIndex < 0) studyIndex = words.length - 1;
+
+        const w = words[studyIndex];
+        document.getElementById('studyWord').textContent = w.en;
+        document.getElementById('studyMeaning').textContent = w.fa;
+        document.getElementById('studyMeaning').classList.remove('show');
+        document.getElementById('studySentence').textContent = w.sentence || '❗ جمله‌ای برای این کلمه ثبت نشده.';
+        document.getElementById('studyCounter').textContent = studyIndex + 1;
+        document.getElementById('studyTotal').textContent = words.length;
+    }
+
+    function nextStudy() {
+        studyIndex = (studyIndex + 1) % words.length;
+        renderStudy();
+        updateTaskProgress();
+        renderTask();
+    }
+
+    function prevStudy() {
+        studyIndex = (studyIndex - 1 + words.length) % words.length;
+        renderStudy();
+    }
+
+    function toggleMeaning() {
+        document.getElementById('studyMeaning').classList.toggle('show');
+    }
+
+    // ============================================================
+    //  RANKING (رتبه‌بندی)
+    // ============================================================
+    function renderRanking() {
+        const sorted = [...users].sort((a, b) => b.score - a.score);
+        const container = document.getElementById('rankList');
+        if (sorted.length === 0) {
+            container.innerHTML = '<p style="color:#636e72;text-align:center;">هیچ کاربری ثبت نشده!</p>';
+            return;
+        }
+        container.innerHTML = sorted.map((u, i) => `
+            <div class="rank-item">
+                <div class="rank-number">#${i + 1}</div>
+                <div class="rank-name">${u.name} ${i === 0 ? '👑' : ''}</div>
+                <div class="rank-score">⭐ ${u.score}</div>
+            </div>
+        `).join('');
+    }
+
+    // ============================================================
+    //  TABS (تب‌ها)
+    // ============================================================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const tab = this.dataset.tab;
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`page-${tab}`).classList.add('active');
+
+            if (tab === 'admin') {
+                if (!isAdmin) {
+                    document.getElementById('adminLock').style.display = 'block';
+                    document.getElementById('adminPanel').style.display = 'none';
+                } else {
+                    document.getElementById('adminLock').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    renderWordList();
+                    renderTask();
+                }
+            }
+            if (tab === 'rank') renderRanking();
+            if (tab === 'game') prepareGame();
+            if (tab === 'study') {
+                renderStudy();
+                renderTask();
+            }
+            if (tab === 'grammar') renderGrammar();
+        });
+    });
+
+    // ============================================================
+    //  RENDER ALL
+    // ============================================================
+    function renderAll() {
+        renderStudy();
+        renderTask();
+        renderGrammar();
+        renderRanking();
+        if (isAdmin) renderWordList();
+    }
+
+    // ============================================================
+    //  INIT (مقداردهی اولیه)
+    // ============================================================
+    loadData();
+    updateStreakOnLoad();
+
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+        currentUser = savedUser;
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('userScore').textContent = getUserScore(currentUser);
+        renderAll();
+        checkTaskOnLoad();
+    }
+
+    window.addEventListener('beforeunload', () => {
+        if (currentUser) localStorage.setItem('currentUser', currentUser);
+        saveData();
+    });
+
+    document.addEventListener('scroll', function() {
+        // برای تشخیص اسکرول به پایین درس
+    });
+</script>
+
+</body>
+</html>
